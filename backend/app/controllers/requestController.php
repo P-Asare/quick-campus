@@ -15,9 +15,12 @@
         public function placeRequest($data){
 
             try {
-                $this->requestModel->createRequest($data);
+                $request_id = $this->requestModel->createRequest($data);
 
-                return ['success' => true];
+                return [
+                    'success' => true,
+                    'request_id' => $request_id
+                ];
             } catch (\Exception $e) {
                 header('HTTP/1.1 422 Unprocessable Entity');
                 $errors = ["success" => false, "error" => $e->getMessage()];

@@ -47,6 +47,12 @@ class ValidationMiddleWare
                             $errors[$field] = "$field should be an integer";
                         }
                         break;
+                    
+                    case 'decimal':
+                        if (!is_numeric($value) || floatval($value) != $value) {
+                            $errors[$field] = "$field must be a decimal number";
+                        }
+                        break;
                 }
             }
         }

@@ -9,6 +9,7 @@
     require_once __DIR__ . '/config/database.php';
     require_once __DIR__ . '/app/middleware/validationMiddleWare.php';
     require_once __DIR__ . '/app/controllers/userController.php';
+    require_once __DIR__ . '/app/controllers/requestController.php';
 
     use Dotenv\Dotenv;
 
@@ -23,6 +24,7 @@
     $pdo = $database->getPdo();
 
     $userController = new UserController($pdo);
+    $requestController = new RequestController($pdo);
 
     // Routes
     // Below I will define all the different end points clients can interact with
@@ -57,6 +59,25 @@
         ]);
 
         echo json_encode($userController->login($data));
+    });
+
+    // Place a delivery request
+    $router->map('POST', '/requests', function () use ($requestController){
+
+        $data = json_decode(file_get_contents('php://input'), true);
+        
+        ValidationMiddleWare::handle($data, [
+            'student_id' => 'integer',
+            'rider_id' => 'integer',
+            'request_type' => 'string',
+            'pickup_latitude' => 'decimal',
+            'pickup_longitude' => 'decimal',
+            'dropoff_latitude' => 'decimal',
+            'dropoff_longitude' => 'decimal',
+            'status_id' => 'integer'
+        ]);
+
+        echo json_encode($requestController->placeRequest($data));
     });
     
     // Match the request to a defined endpoint

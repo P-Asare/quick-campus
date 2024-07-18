@@ -11,7 +11,8 @@
         public function createRequest($data){
 
             // put data in table
-            return $this->insert($data);
+            $this->insert($data);
+            return $this->pdo->lastInsertId();
         }
 
         // Find request by Id
