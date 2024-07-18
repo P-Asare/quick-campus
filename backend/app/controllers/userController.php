@@ -57,7 +57,8 @@ class UserController
 
                 return [
                     "success" => true, 
-                    "id" => $db_details['userId'],
+                    "id" => $db_details['user_id'],
+                    "role" => $db_details['role_id']
                 ];
             } else {
                 throw new InvalidArgumentException("Wrong password.");
