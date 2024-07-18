@@ -1,7 +1,5 @@
 <?php
 
-use Dotenv\Exception\InvalidFileException;
-
 require_once __DIR__ . '/../models/user.php';
 // Class to cater for all user oriented actions
 class UserController
