@@ -22,6 +22,7 @@ class UserController
                 $data['lastname'],
                 $data['email'],
                 $data['password'],
+                $data['role'],
             );
 
             return ['success' => true];
@@ -77,13 +78,30 @@ class UserController
     }
 
     // Handle request to fetch all users
-    public function getAllUsers()
+    public function getAll(){
+        try {
+
+            // get all the users in the database
+            $users = $this->userModel->fetchAll();
+
+            return ["success" => true, "data" => $users];
+        } catch (\Exception $e) {
+            header('HTTP/1.1 422 Unprocessable Entity');
+            return [
+                "success" => false,
+                "error" => $e->getMessage(),
+            ];
+        }
+    }
+
+    // Handle request to fetch all drivers
+    public function getAllDrivers()
     {
 
         try {
 
             // get all the users in the database
-            $users = $this->userModel->fetchAll();
+            $users = $this->userModel->fetchAllDrivers();
 
             return ["success" => true, "data" => $users];
         } catch (\Exception $e) {

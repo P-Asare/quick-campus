@@ -39,6 +39,7 @@
             'email' => 'email',
             'password' => 'password',
             'confirm_password' => 'confirm_password',
+            'role' => 'integer'
         ]);
 
         echo json_encode($userController->createUser($data));

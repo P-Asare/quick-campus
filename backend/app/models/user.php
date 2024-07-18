@@ -7,7 +7,7 @@ class User extends Model
     protected $table = 'users';
 
     // Create single user
-    public function createUser($firstname, $lastname, $email, $password)
+    public function createUser($firstname, $lastname, $email, $password, $role)
     {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
         
@@ -16,6 +16,7 @@ class User extends Model
             'lastName' => $lastname,
             'email' => $email,
             'password' => $password_hash,
+            'role_id' => $role
         ];
 
         return $this->insert($data);
@@ -28,11 +29,21 @@ class User extends Model
         return $result;
     }
 
-    // Fetch all users in the system with a specific set of column details (attributes)
+    // Fetch all the users in the system with a specific set of column details
     public function fetchAll()
     {
-        $sql = "SELECT userId, firstName, lastName, email, profile_image
+        $sql = "SELECT user_id, firstName, lastName, email, profile_image
                 FROM {$this->table}";
+
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Fetch all drivers in the system with a specific set of column details (attributes)
+    public function fetchAllDrivers()
+    {
+        $sql = "SELECT user_id, firstName, lastName, email, profile_image
+                FROM {$this->table} WHERE role_id = 3";
 
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -41,7 +52,7 @@ class User extends Model
     // Find a user by their id
     public function findProfileById($id)
     {
-        $sql = "SELECT user_id, firstname, lastname, email, profile_image FROM " . $this->table . " WHERE user_id = :id";
+        $sql = "SELECT user_id, firstname, lastname, email, role_id, profile_image FROM " . $this->table . " WHERE user_id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
