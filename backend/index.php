@@ -79,6 +79,24 @@
 
         echo json_encode($requestController->placeRequest($data));
     });
+
+    // get delivery requests by a user Id for both riders and students
+    $router->map('GET', '/requests/[i:user_role]/[i:user_id]', function ($user_role, $user_id) use ($requestController){
+
+        ValidationMiddleWare::handle(
+            ["user_id" => $user_id, "user_role" => $user_role], 
+            [
+                "user_id" => "integer",
+                "user_role" => "integer"
+            ]
+        );
+
+        if ($user_role == 2){
+            echo json_encode($requestController->getRequestsByUser("user_id", $user_id));
+        } else if ($user_role == 3) {
+            echo json_encode($requestController->getRequestsByUser("rider_id", $user_id));
+        }
+    });
     
     // Match the request to a defined endpoint
     $match = $router->match();
