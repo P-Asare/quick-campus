@@ -1,21 +1,21 @@
 // landing page two
 
 import 'package:flutter/material.dart';
-import 'package:quickcampus/screens/login_page.dart';
+import 'package:quickcampus/screens/sign_in_page.dart';
+import 'package:quickcampus/screens/sign_up_page.dart';
 
 class SecondLanding extends StatelessWidget {
   const SecondLanding({super.key});
 
-  // Route to the next page
-  void _nextPage(BuildContext context) {
-    Navigator.of(context).push(_createRoute());
+  // Route to the sign in page
+  void _nextPage(BuildContext context, Widget page) {
+    Navigator.of(context).push(_createRoute(page));
   }
 
   //Animated route
-  Route _createRoute() {
+  Route _createRoute(Widget page) {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          const LoginPage(),
+      pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
@@ -139,7 +139,7 @@ class SecondLanding extends StatelessWidget {
                 width: 316,
                 height: 54,
                 child: ElevatedButton(
-                  onPressed: () => _nextPage(context),
+                  onPressed: () => _nextPage(context, const SignUpPage()),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF307A59),
                     elevation: 0,
@@ -167,7 +167,7 @@ class SecondLanding extends StatelessWidget {
                 width: 316,
                 height: 54,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => _nextPage(context, const SignInPage()),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFD1E2DB),
                     elevation: 0,
