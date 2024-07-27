@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:quickcampus/screens/sign_in_page.dart';
 import 'package:quickcampus/screens/sign_up_page.dart';
+import 'package:quickcampus/widgets/filled_button.dart';
+import 'package:quickcampus/widgets/transparent_button.dart';
 
 class SecondLanding extends StatelessWidget {
   const SecondLanding({super.key});
@@ -134,28 +136,10 @@ class SecondLanding extends StatelessWidget {
           // Buttons
           Column(
             children: [
-              // Coninue button
-              Container(
-                width: 316,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () => _nextPage(context, const SignUpPage()),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF307A59),
-                    elevation: 0,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7), // Rounded corners
-                    ),
-                  ),
-                  child: const Text(
-                    "Get Started",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
+              // Get Started button
+              MyFilledButton(
+                  title: "Get Started",
+                  onPressed: () => _nextPage(context, const SignUpPage())),
 
               // Space between
               const SizedBox(
@@ -163,27 +147,9 @@ class SecondLanding extends StatelessWidget {
               ),
 
               // Sign-up button
-              Container(
-                width: 316,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () => _nextPage(context, const SignInPage()),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFD1E2DB),
-                    elevation: 0,
-                    foregroundColor: const Color(0xFF307A59),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7), // Rounded corners
-                    ),
-                  ),
-                  child: const Text(
-                    "Sign In",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              )
+              MyTransparentButton(
+                  title: "Sign In",
+                  onPressed: () => _nextPage(context, const SignInPage())),
             ],
           )
         ],

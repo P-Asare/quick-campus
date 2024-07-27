@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quickcampus/screens/landing_page_two.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
+import 'package:quickcampus/widgets/transparent_button.dart';
 
 class FirstLanding extends StatelessWidget {
   const FirstLanding({super.key});
@@ -134,27 +135,8 @@ class FirstLanding extends StatelessWidget {
           Column(
             children: [
               // Coninue button
-              Container(
-                width: 316,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () => _nextPage(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF307A59),
-                    elevation: 0,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7), // Rounded corners
-                    ),
-                  ),
-                  child: const Text(
-                    "Continue",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
+              MyFilledButton(
+                  title: "Continue", onPressed: () => _nextPage(context)),
 
               // Space between
               const SizedBox(
@@ -162,9 +144,9 @@ class FirstLanding extends StatelessWidget {
               ),
 
               // Sign-up button
-              MyFilledButton(
+              MyTransparentButton(
                 title: "Sign In",
-                onPressed: () => _nextPage(context),
+                onPressed: () {},
               )
             ],
           )

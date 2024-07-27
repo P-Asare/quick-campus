@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class MyFilledButton extends StatelessWidget {
+class MyTransparentButton extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const MyFilledButton(
+  const MyTransparentButton(
       {super.key, required this.title, required this.onPressed});
 
   @override
@@ -15,9 +15,9 @@ class MyFilledButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF307A59),
+          backgroundColor: const Color(0xFFD1E2DB),
           elevation: 0,
-          foregroundColor: Colors.white,
+          foregroundColor: const Color(0xFF307A59),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(7), // Rounded corners
           ),
