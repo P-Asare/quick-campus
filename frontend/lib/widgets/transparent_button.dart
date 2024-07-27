@@ -10,7 +10,7 @@ class MyTransparentButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 316,
+      width: double.infinity,
       height: 54,
       child: ElevatedButton(
         onPressed: onPressed,

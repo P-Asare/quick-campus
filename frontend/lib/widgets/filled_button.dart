@@ -10,8 +10,8 @@ class MyFilledButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 316,
       height: 54,
+      width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(

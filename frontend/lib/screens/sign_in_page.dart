@@ -1,6 +1,7 @@
 // Login page
 
 import 'package:flutter/material.dart';
+import 'package:quickcampus/widgets/filled_button.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
@@ -144,17 +145,26 @@ class SignInPage extends StatelessWidget {
 
                 // spacing
                 const SizedBox(
-                  height: 10,
+                  height: 3,
                 ),
 
-                TextButton(onPressed: () {}, child: const Text("Forgot Password?"),),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    "Forgot Password?",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF307A59),
+                    ),
+                  ),
+                ),
 
                 // spacing
                 const SizedBox(
                   height: 30,
                 ),
 
-                
+                MyFilledButton(title: "Login", onPressed: () {}),
               ],
             ),
           )

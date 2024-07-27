@@ -38,6 +38,10 @@ class FirstLanding extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
+      padding: const EdgeInsets.only(
+        left: 30,
+        right: 30,
+      ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
