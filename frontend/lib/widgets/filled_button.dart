@@ -25,6 +25,7 @@ class MyFilledButton extends StatelessWidget {
         child: Text(
           title,
           style: const TextStyle(
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
