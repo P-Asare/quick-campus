@@ -1,7 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:quickcampus/screens/landing_page_two.dart';
 
 class FirstLanding extends StatelessWidget {
   const FirstLanding({super.key});
+
+  // Route to the next page
+  _nextPage(BuildContext context) {
+    Navigator.of(context).push(_createRoute());
+  }
+
+  //Animated route
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const SecondLanding(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,13 +36,13 @@ class FirstLanding extends StatelessWidget {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color(0xFFD1E2DB), // Green
+            Color.fromARGB(155, 139, 188, 166), // Green
             Colors.white, // Middle color white
             Colors.white // White
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          stops: [0.3, 0.5, 0.7], // Adjust the percentage of each color
+          stops: [0.1, 0.5, 0.7], // Adjust the percentage of each color
         ),
       ),
       child: Column(
@@ -108,7 +134,7 @@ class FirstLanding extends StatelessWidget {
                 width: 316,
                 height: 54,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => _nextPage(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF307A59),
                     elevation: 0,
@@ -159,4 +185,5 @@ class FirstLanding extends StatelessWidget {
       ),
     ));
   }
+  
 }
