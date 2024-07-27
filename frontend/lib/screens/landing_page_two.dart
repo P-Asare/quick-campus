@@ -1,9 +1,38 @@
 // landing page two
 
 import 'package:flutter/material.dart';
+import 'package:quickcampus/screens/login_page.dart';
 
 class SecondLanding extends StatelessWidget {
   const SecondLanding({super.key});
+
+  // Route to the next page
+  void _nextPage(BuildContext context) {
+    Navigator.of(context).push(_createRoute());
+  }
+
+  //Animated route
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const LoginPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 800),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +139,7 @@ class SecondLanding extends StatelessWidget {
                 width: 316,
                 height: 54,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => _nextPage(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF307A59),
                     elevation: 0,
