@@ -110,6 +110,13 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -252,9 +259,11 @@ class _SignInPageState extends State<SignInPage> {
                                   _hidePassword = !_hidePassword;
                                 });
                               },
-                              icon: const Icon(
-                                Icons.remove_red_eye_outlined,
-                                color: Color.fromARGB(255, 105, 105, 105),
+                              icon: Icon(
+                                _hidePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: const Color.fromARGB(255, 105, 105, 105),
                               ),
                             ),
                             filled: true,
