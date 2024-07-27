@@ -5,20 +5,22 @@ class FirstLanding extends StatelessWidget {
   const FirstLanding({super.key});
 
   // Route to the next page
-  _nextPage(BuildContext context) {
+  void _nextPage(BuildContext context) {
     Navigator.of(context).push(_createRoute());
   }
 
   //Animated route
   Route _createRoute() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const SecondLanding(),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const SecondLanding(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
         const curve = Curves.ease;
 
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
         var offsetAnimation = animation.drive(tween);
 
         return SlideTransition(
@@ -26,6 +28,7 @@ class FirstLanding extends StatelessWidget {
           child: child,
         );
       },
+      transitionDuration: const Duration(milliseconds: 800),
     );
   }
 
@@ -185,5 +188,4 @@ class FirstLanding extends StatelessWidget {
       ),
     ));
   }
-  
 }

@@ -37,13 +37,13 @@ class SecondLanding extends StatelessWidget {
           ),
 
           Image.asset(
-            "assets/images/package.png",
+            "assets/images/car.png",
           ),
 
           const Column(
             children: [
               Text(
-                "All your\nordered items",
+                "Git pickup from your\ndoorstep",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xFF120101),
@@ -60,7 +60,7 @@ class SecondLanding extends StatelessWidget {
               ),
 
               Text(
-                "Purchase an item of your choice and\nhave us deliver it",
+                "Request for an item to get delivered\nto any location in Accra",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0x5B120101),
@@ -120,7 +120,7 @@ class SecondLanding extends StatelessWidget {
                     ),
                   ),
                   child: const Text(
-                    "Continue",
+                    "Get Started",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
