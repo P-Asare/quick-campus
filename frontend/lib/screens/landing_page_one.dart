@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:quickcampus/screens/landing_page_two.dart';
+import 'package:quickcampus/screens/sign_in_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 import 'package:quickcampus/widgets/transparent_button.dart';
 
 class FirstLanding extends StatelessWidget {
   const FirstLanding({super.key});
+
+  // Route straight to sign in page
+  void _signInPage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: ((context) => const SignInPage())));
+  }
 
   // Route to the next page
   void _nextPage(BuildContext context) {
@@ -150,7 +157,7 @@ class FirstLanding extends StatelessWidget {
               // Sign-up button
               MyTransparentButton(
                 title: "Sign In",
-                onPressed: () {},
+                onPressed: () => _signInPage(context),
               )
             ],
           )

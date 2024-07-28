@@ -20,6 +20,8 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _hideConfirmPassword = true;
 
   // Validators for each input field
+
+  // Ensure entry of firstname
   String? _validateFirstName(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your first name';
@@ -27,6 +29,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return null;
   }
 
+  // Ensure entry of lastname
   String? _validateLastName(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your last name';
@@ -34,6 +37,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return null;
   }
 
+  // Validate email format
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your email';
@@ -43,6 +47,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return null;
   }
 
+  // Validate password input and format
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your password';
@@ -71,6 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return null; // Password is valid
   }
 
+  // Validate password similarity
   String? _validateConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please confirm your password';
@@ -81,6 +87,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return null;
   }
 
+  // Register user and route to homepage
   void _register() {
     if (_formKey.currentState?.validate() ?? false) {
       // Form is valid, proceed with registration
