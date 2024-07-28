@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:quickcampus/screens/landing_page_two.dart';
+import 'package:quickcampus/screens/sign_in_page.dart';
+import 'package:quickcampus/widgets/filled_button.dart';
+import 'package:quickcampus/widgets/transparent_button.dart';
 
 class FirstLanding extends StatelessWidget {
   const FirstLanding({super.key});
+
+  // Route straight to sign in page
+  void _signInPage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: ((context) => const SignInPage())));
+  }
 
   // Route to the next page
   void _nextPage(BuildContext context) {
@@ -36,6 +45,10 @@ class FirstLanding extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
+      padding: const EdgeInsets.only(
+        left: 30,
+        right: 30,
+      ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -133,27 +146,8 @@ class FirstLanding extends StatelessWidget {
           Column(
             children: [
               // Coninue button
-              Container(
-                width: 316,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () => _nextPage(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF307A59),
-                    elevation: 0,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7), // Rounded corners
-                    ),
-                  ),
-                  child: const Text(
-                    "Continue",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
+              MyFilledButton(
+                  title: "Continue", onPressed: () => _nextPage(context)),
 
               // Space between
               const SizedBox(
@@ -161,26 +155,9 @@ class FirstLanding extends StatelessWidget {
               ),
 
               // Sign-up button
-              Container(
-                width: 316,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFD1E2DB),
-                    elevation: 0,
-                    foregroundColor: const Color(0xFF307A59),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7), // Rounded corners
-                    ),
-                  ),
-                  child: const Text(
-                    "Sign In",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+              MyTransparentButton(
+                title: "Sign In",
+                onPressed: () => _signInPage(context),
               )
             ],
           )
