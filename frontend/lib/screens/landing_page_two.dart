@@ -116,7 +116,7 @@ class SecondLanding extends StatelessWidget {
                 width: 8,
                 height: 8,
                 decoration: const ShapeDecoration(
-                  color: Color(0xFF307A59),
+                  color: Color(0xFFD1E2DB),
                   shape: OvalBorder(),
                 ),
               ),
@@ -130,7 +130,7 @@ class SecondLanding extends StatelessWidget {
                 width: 8,
                 height: 8,
                 decoration: const ShapeDecoration(
-                  color: Color(0xFFD1E2DB),
+                  color: Color(0xFF307A59),
                   shape: OvalBorder(),
                 ),
               )
