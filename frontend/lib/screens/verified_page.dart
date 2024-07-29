@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:quickcampus/screens/home_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
+import 'package:quickcampus/widgets/nav_bar.dart';
 
 class VerifiedPage extends StatelessWidget {
   const VerifiedPage({super.key});
 
   // route to home page
-  void _goToHomePage(BuildContext context) {
+  void _goToNextPage(BuildContext context) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const HomePage()));
+        .push(MaterialPageRoute(builder: (context) => const MyNavigationBar()));
   }
 
   @override
@@ -53,7 +53,7 @@ class VerifiedPage extends StatelessWidget {
 
             MyFilledButton(
               title: "Get Started",
-              onPressed: () => _goToHomePage(context),
+              onPressed: () => _goToNextPage(context),
             ),
           ],
         ),
