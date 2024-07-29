@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:quickcampus/screens/home_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 
 class VerifiedPage extends StatelessWidget {
   const VerifiedPage({super.key});
+
+  // route to home page
+  void _goToHomePage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const HomePage()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +53,7 @@ class VerifiedPage extends StatelessWidget {
 
             MyFilledButton(
               title: "Get Started",
-              onPressed: () {},
+              onPressed: () => _goToHomePage(context),
             ),
           ],
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickcampus/screens/verified_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 
 class OtpPage extends StatefulWidget {
@@ -57,18 +58,23 @@ class OtpPageState extends State<OtpPage> {
     }
   }
 
+  void _goToVerifiedPage() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const VerifiedPage()));
+  }
+
   // Verify otp and move to next field
   void _verifyOTP() {
     final otpCode = _codeController1.text +
         _codeController2.text +
         _codeController3.text +
         _codeController4.text;
+
+    _goToVerifiedPage();
   }
 
   // Resend otp to email
-  void _resendOTP(){
-
-  }
+  void _resendOTP() {}
 
   @override
   Widget build(BuildContext context) {
