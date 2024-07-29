@@ -14,7 +14,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   // Forget password
-  void _forgetPassword(BuildContext context) {
+  void _resetPassword(BuildContext context) {
 
   }
 
@@ -128,7 +128,7 @@ class ProfilePage extends StatelessWidget {
               ),
               trailing: IconButton(
                 icon: const Icon(Icons.arrow_forward_ios_sharp),
-                onPressed: () => _forgetPassword(context),
+                onPressed: () => _resetPassword(context),
               ),
             ),
           ),
