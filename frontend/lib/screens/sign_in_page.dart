@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:quickcampus/screens/forget_password.dart';
-import 'package:quickcampus/screens/home_page.dart';
 import 'package:quickcampus/screens/sign_up_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
+import 'package:quickcampus/widgets/nav_bar.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -64,8 +64,8 @@ class _SignInPageState extends State<SignInPage> {
       // Form is valid, proceed with login
       print('Login successful');
 
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const HomePage()));
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const MyNavigationBar()));
     } else {
       // Form is invalid, show errors
       print('Login failed');
