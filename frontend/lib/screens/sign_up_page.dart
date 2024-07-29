@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quickcampus/screens/home_page.dart';
+import 'package:quickcampus/screens/otp_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -93,8 +93,9 @@ class _SignUpPageState extends State<SignUpPage> {
       // Form is valid, proceed with registration
       print('Registration successful');
 
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const HomePage()));
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => OtpPage(email: _emailController.text),
+      ));
     } else {
       // Form is invalid, show errors
       print('Registration failed');
