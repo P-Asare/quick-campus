@@ -16,8 +16,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final Completer<GoogleMapController> _controller = Completer();
-  TextEditingController _pickupController = TextEditingController();
-  TextEditingController _destinationController = TextEditingController();
+  final TextEditingController _pickupController = TextEditingController();
+  final TextEditingController _destinationController = TextEditingController();
 
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(5.7630902491463365, -0.2236314561684989),
