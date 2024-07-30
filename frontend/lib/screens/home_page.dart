@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   List<String> _pickupSuggestions = [];
   List<PlaceDetails> _placeDetails = [];
   Timer? _debounce;
+  bool _showConfirmButton = true;
 
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(5.7630902491463365, -0.2236314561684989),
@@ -58,6 +59,7 @@ class _HomePageState extends State<HomePage> {
     _debounce = Timer(const Duration(milliseconds: 500), () {
       if (_pickupController.text.isNotEmpty) {
         makeSuggestion(_pickupController.text);
+        print(_pickupSuggestions);
       }
     });
   }
@@ -94,7 +96,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getPlaceDetails(String placeId) async {
-    String apiKey = "AIzaSyDrk905BDTiFuJhQxtfXdKUPTSDPgpiSrE";
+    String apiKey = "YOUR_API_KEY_HERE";
     String groundUrl =
         "https://maps.googleapis.com/maps/api/place/details/json";
     String request = '$groundUrl?place_id=$placeId&key=$apiKey';
@@ -133,8 +135,6 @@ class _HomePageState extends State<HomePage> {
             _controller.complete(controller);
           },
         ),
-
-        // Input
         SlidingUpPanel(
           controller: _panelController,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20.0)),
@@ -214,8 +214,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         const SizedBox(height: 8.0),
-                        _pickupFocusNode.hasFocus &&
-                                _pickupSuggestions.isNotEmpty
+                        (_pickupFocusNode.hasFocus &&
+                                _pickupSuggestions.isNotEmpty)
                             ? Container(
                                 height: 200.0, // Adjust height as needed
                                 child: ListView.builder(
@@ -238,8 +238,6 @@ class _HomePageState extends State<HomePage> {
                               )
                             : Container(),
                         const SizedBox(height: 8.0),
-                        MyFilledButton(
-                            title: 'Confirm Order', onPressed: () {}),
                       ],
                     ),
                   ),
@@ -247,7 +245,32 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          onPanelSlide: (position) {
+            setState(() {
+              _showConfirmButton = (position <
+                  0.5); // Show button if panel is less than 50% open
+            });
+          },
+          onPanelClosed: () {
+            setState(() {
+              _pickupSuggestions
+                  .clear(); // Clear suggestions when panel is closed
+              _showConfirmButton = true; // Show confirm button
+            });
+          },
         ),
+        if (_showConfirmButton)
+          Positioned(
+            bottom: 20.0,
+            left: 20.0,
+            right: 20.0,
+            child: MyFilledButton(
+              title: 'Confirm Order',
+              onPressed: () {
+                // Your onPressed logic
+              },
+            ),
+          ),
       ]),
     );
   }
