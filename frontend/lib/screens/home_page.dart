@@ -81,7 +81,6 @@ class _HomePageState extends State<HomePage> {
     if (response.statusCode == 200) {
       List<String> suggestions = [];
       var json = jsonDecode(response.body);
-      print(response.body);
       for (var prediction in json['predictions']) {
         suggestions.add(prediction['description']);
         getPlaceDetails(prediction['place_id']); // Fetch details
@@ -189,30 +188,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         const SizedBox(height: 8.0),
-                        _pickupFocusNode.hasFocus &&
-                                _pickupSuggestions.isNotEmpty
-                            ? Container(
-                                height: 200.0,
-                                child: ListView.builder(
-                                  itemCount: _pickupSuggestions.length,
-                                  itemBuilder: (context, index) {
-                                    return ListTile(
-                                      title: Text(_pickupSuggestions[index]),
-                                      onTap: () {
-                                        setState(() {
-                                          _pickupController.text =
-                                              _pickupSuggestions[index];
-                                          _pickupSuggestions.clear();
-                                          _panelController
-                                              .close(); // Close the panel after selection
-                                        });
-                                      },
-                                    );
-                                  },
-                                ),
-                              )
-                            : Container(),
-                        const SizedBox(height: 8.0),
                         TextField(
                           controller: _destinationController,
                           cursorColor: const Color(0xFF307A59),
@@ -238,7 +213,31 @@ class _HomePageState extends State<HomePage> {
                                 const TextStyle(color: Color(0xFF307A59)),
                           ),
                         ),
-                        const SizedBox(height: 16.0),
+                        const SizedBox(height: 8.0),
+                        _pickupFocusNode.hasFocus &&
+                                _pickupSuggestions.isNotEmpty
+                            ? Container(
+                                height: 200.0, // Adjust height as needed
+                                child: ListView.builder(
+                                  itemCount: _pickupSuggestions.length,
+                                  itemBuilder: (context, index) {
+                                    return ListTile(
+                                      title: Text(_pickupSuggestions[index]),
+                                      onTap: () {
+                                        setState(() {
+                                          _pickupController.text =
+                                              _pickupSuggestions[index];
+                                          _pickupSuggestions.clear();
+                                          _panelController
+                                              .close(); // Close the panel after selection
+                                        });
+                                      },
+                                    );
+                                  },
+                                ),
+                              )
+                            : Container(),
+                        const SizedBox(height: 8.0),
                         MyFilledButton(
                             title: 'Confirm Order', onPressed: () {}),
                       ],
