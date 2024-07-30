@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:quickcampus/models/location.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   final FocusNode _pickupFocusNode = FocusNode();
   final PanelController _panelController = PanelController();
   List<String> _pickupSuggestions = [];
-  List<PlaceDetails> _placeDetails = [];
+  List<Location> _placeDetails = [];
   Timer? _debounce;
   bool _showConfirmButton = true;
 
@@ -52,6 +53,11 @@ class _HomePageState extends State<HomePage> {
     _pickupFocusNode.dispose();
     _debounce?.cancel();
     super.dispose();
+  }
+
+  // place request
+  void _placeRequest(){
+
   }
 
   void _onPickupChanged() {
@@ -111,7 +117,7 @@ class _HomePageState extends State<HomePage> {
       var lng = location['lng'];
 
       setState(() {
-        _placeDetails.add(PlaceDetails(
+        _placeDetails.add(Location(
           name: result['name'],
           address: result['formatted_address'],
           lat: lat,
@@ -206,31 +212,6 @@ class _HomePageState extends State<HomePage> {
                                 const TextStyle(color: Color(0xFF307A59)),
                           ),
                         ),
-                        // TextField(
-                        //   controller: _destinationController,
-                        //   cursorColor: const Color(0xFF307A59),
-                        //   decoration: InputDecoration(
-                        //     focusColor: const Color(0xFFD1E2DB),
-                        //     labelText: 'Destination Address',
-                        //     prefixIcon: Theme(
-                        //       data: ThemeData(
-                        //         iconTheme:
-                        //             const IconThemeData(color: Colors.grey),
-                        //       ),
-                        //       child: const Icon(Icons.location_on_sharp),
-                        //     ),
-                        //     border: const OutlineInputBorder(),
-                        //     focusedBorder: OutlineInputBorder(
-                        //       borderRadius: BorderRadius.circular(1.0),
-                        //       borderSide: const BorderSide(
-                        //         color: Color(0xFFD1E2DB),
-                        //         width: 2.0,
-                        //       ),
-                        //     ),
-                        //     floatingLabelStyle:
-                        //         const TextStyle(color: Color(0xFF307A59)),
-                        //   ),
-                        // ),
                         const SizedBox(height: 5.0),
                         (_pickupFocusNode.hasFocus &&
                                 _pickupSuggestions.isNotEmpty)
@@ -284,25 +265,10 @@ class _HomePageState extends State<HomePage> {
             right: 20.0,
             child: MyFilledButton(
               title: 'Confirm Order',
-              onPressed: () {
-                // Your onPressed logic
-              },
+              onPressed: () => _placeRequest(),
             ),
           ),
       ]),
     );
   }
-}
-
-class PlaceDetails {
-  final String name;
-  final String address;
-  final double lat;
-  final double lng;
-
-  PlaceDetails(
-      {required this.name,
-      required this.address,
-      required this.lat,
-      required this.lng});
 }
