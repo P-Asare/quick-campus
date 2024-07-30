@@ -146,9 +146,9 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(left: 10.0, right: 10.0),
               child: Column(
                 children: [
-                  const SizedBox(height: 15.0),
+                  const SizedBox(height: 12.0),
                   Container(
-                    width: 40.0,
+                    width: 50.0,
                     height: 6.0,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
@@ -161,13 +161,32 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
+                        const SizedBox(height: 8),
+                        const Text(
+                          "Sending a package?",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        const Text(
+                          "Tell us where the package is headed",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 15),
                         TextField(
                           controller: _pickupController,
                           focusNode: _pickupFocusNode,
                           cursorColor: const Color(0xFF307A59),
                           decoration: InputDecoration(
                             focusColor: const Color(0xFFD1E2DB),
-                            labelText: 'Pickup Address',
+                            labelText: 'Destination Address',
                             prefixIcon: Theme(
                               data: ThemeData(
                                 iconTheme:
@@ -187,33 +206,32 @@ class _HomePageState extends State<HomePage> {
                                 const TextStyle(color: Color(0xFF307A59)),
                           ),
                         ),
-                        const SizedBox(height: 8.0),
-                        TextField(
-                          controller: _destinationController,
-                          cursorColor: const Color(0xFF307A59),
-                          decoration: InputDecoration(
-                            focusColor: const Color(0xFFD1E2DB),
-                            labelText: 'Destination Address',
-                            prefixIcon: Theme(
-                              data: ThemeData(
-                                iconTheme:
-                                    const IconThemeData(color: Colors.grey),
-                              ),
-                              child: const Icon(Icons.location_on_sharp),
-                            ),
-                            border: const OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(1.0),
-                              borderSide: const BorderSide(
-                                color: Color(0xFFD1E2DB),
-                                width: 2.0,
-                              ),
-                            ),
-                            floatingLabelStyle:
-                                const TextStyle(color: Color(0xFF307A59)),
-                          ),
-                        ),
-                        const SizedBox(height: 8.0),
+                        // TextField(
+                        //   controller: _destinationController,
+                        //   cursorColor: const Color(0xFF307A59),
+                        //   decoration: InputDecoration(
+                        //     focusColor: const Color(0xFFD1E2DB),
+                        //     labelText: 'Destination Address',
+                        //     prefixIcon: Theme(
+                        //       data: ThemeData(
+                        //         iconTheme:
+                        //             const IconThemeData(color: Colors.grey),
+                        //       ),
+                        //       child: const Icon(Icons.location_on_sharp),
+                        //     ),
+                        //     border: const OutlineInputBorder(),
+                        //     focusedBorder: OutlineInputBorder(
+                        //       borderRadius: BorderRadius.circular(1.0),
+                        //       borderSide: const BorderSide(
+                        //         color: Color(0xFFD1E2DB),
+                        //         width: 2.0,
+                        //       ),
+                        //     ),
+                        //     floatingLabelStyle:
+                        //         const TextStyle(color: Color(0xFF307A59)),
+                        //   ),
+                        // ),
+                        const SizedBox(height: 5.0),
                         (_pickupFocusNode.hasFocus &&
                                 _pickupSuggestions.isNotEmpty)
                             ? Container(
