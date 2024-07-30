@@ -24,6 +24,40 @@ class _HomePageState extends State<HomePage> {
     zoom: 14,
   );
 
+  final List<Marker> myMarker = [];
+  final List<Marker> markerList = [
+    const Marker(
+        markerId: MarkerId('home'),
+        position: LatLng(5.7630902491463365, -0.2236314561684989),
+        infoWindow: InfoWindow(title: "The hill"))
+  ];
+  //List<Marker> myMarker = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // _loadCustomMarker();
+    myMarker.addAll(markerList);
+  }
+
+  // Future<void> _loadCustomMarker() async {
+  //   final BitmapDescriptor markerIcon = await BitmapDescriptor.fromAssetImage(
+  //     const ImageConfiguration(size: Size(48, 48)),
+  //     'assets/images/marker.png',
+  //   );
+
+  //   setState(() {
+  //     myMarker = [
+  //       Marker(
+  //         markerId: const MarkerId('home'),
+  //         position: const LatLng(5.7630902491463365, -0.2236314561684989),
+  //         infoWindow: const InfoWindow(title: "The hill"),
+  //         icon: markerIcon,
+  //       ),
+  //     ];
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +65,7 @@ class _HomePageState extends State<HomePage> {
         GoogleMap(
           initialCameraPosition: _initialPosition,
           mapType: MapType.normal,
+          markers: Set<Marker>.of(myMarker),
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },
@@ -39,8 +74,8 @@ class _HomePageState extends State<HomePage> {
         // Input
         SlidingUpPanel(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20.0)),
-          maxHeight: 245,
-          minHeight: 50,
+          // maxHeight: 245,
+          minHeight: 245,
           panel: Center(
             child: Padding(
               padding: const EdgeInsets.only(
