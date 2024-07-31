@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   List<MyLocation> _placeDetails = [];
   Timer? _debounce;
   bool _showConfirmButton = true;
+  MyLocation? _selectedLocation;
 
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(5.7630902491463365, -0.2236314561684989),
@@ -59,16 +60,18 @@ class _HomePageState extends State<HomePage> {
 
   // Place request
   void _placeRequest() {
-    if (_pickupController.text.isNotEmpty) {
-      _getLatLngFromAddress(_pickupController.text);
+    if (_pickupController.text.isNotEmpty && _selectedLocation != null) {
+      _goToNextPage(context, _selectedLocation!);
     }
-    _goToNextPage(context);
   }
 
   // Next page
-  void _goToNextPage(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const DeliveringPage()));
+  void _goToNextPage(BuildContext context, MyLocation location) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => DeliveringPage(destination: location),
+      ),
+    );
   }
 
   void _onPickupChanged() {
@@ -120,6 +123,11 @@ class _HomePageState extends State<HomePage> {
       if (locations.isNotEmpty) {
         Location location = locations.first;
         setState(() {
+          _selectedLocation = MyLocation(
+            name: address,
+            lat: location.latitude,
+            lng: location.longitude,
+          );
           myMarker.add(
             Marker(
               markerId: MarkerId(address),
