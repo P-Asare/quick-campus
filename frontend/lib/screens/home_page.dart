@@ -1,13 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:quickcampus/models/location.dart';
 import 'package:quickcampus/screens/delivering_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:http/http.dart' as http;
+import 'package:quickcampus/services/maps_services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   Timer? _debounce;
   bool _showConfirmButton = true;
   MyLocation? _selectedLocation;
+  late MapsService _mapsService;
 
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(5.7630902491463365, -0.2236314561684989),
@@ -45,6 +44,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     myMarker.addAll(markerList);
+    _mapsService = MapsService();
     _pickupController.addListener(_onPickupChanged);
     _pickupFocusNode.addListener(_onFocusChange);
   }
@@ -89,56 +89,36 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Make suggestion for user
   void makeSuggestion(String input) async {
-    String tokenForSession = '37465';
-    String apiKey = "AIzaSyDrk905BDTiFuJhQxtfXdKUPTSDPgpiSrE";
-    String groundUrl =
-        "https://maps.googleapis.com/maps/api/place/autocomplete/json";
-    String request =
-        '$groundUrl?input=$input&key=$apiKey&sessiontoken=$tokenForSession';
-
-    var response = await http.get(Uri.parse(request));
-
-    if (response.statusCode == 200) {
-      var json = jsonDecode(response.body);
+    try {
+      List<MyLocation> suggestions = await _mapsService.fetchSuggestions(input);
       setState(() {
-        _pickupSuggestions = (json['predictions'] as List)
-            .map<String>((prediction) => prediction['description'] as String)
-            .toList();
-        _placeDetails = (json['predictions'] as List)
-            .map<MyLocation>((prediction) => MyLocation(
-                  name: prediction['description'] as String,
-                  placeId: prediction['place_id'] as String,
-                ))
-            .toList();
+        _pickupSuggestions =
+            suggestions.map((location) => location.name).toList();
+        _placeDetails = suggestions;
       });
-    } else {
-      print('Error: ${response.reasonPhrase}');
+    } catch (e) {
+      print('Error fetching suggestions: $e');
     }
   }
 
+  // Get longitude and latitude from address to plot new marker
   Future<void> _getLatLngFromAddress(String address) async {
-    try {
-      List<Location> locations = await locationFromAddress(address);
-      if (locations.isNotEmpty) {
-        Location location = locations.first;
-        setState(() {
-          _selectedLocation = MyLocation(
-            name: address,
-            lat: location.latitude,
-            lng: location.longitude,
-          );
-          myMarker.add(
-            Marker(
-              markerId: MarkerId(address),
-              position: LatLng(location.latitude, location.longitude),
-              infoWindow: InfoWindow(title: address),
-            ),
-          );
-        });
-      }
-    } catch (e) {
-      print('Error getting location from address: $e');
+    MyLocation? location = await _mapsService.getLatLngFromAddress(address);
+    print("Get LatLng is printed");
+    if (location != null) {
+      setState(() {
+        _selectedLocation = location;
+        myMarker.add(
+          Marker(
+            markerId: MarkerId(address),
+            position: LatLng(location.lat!, location.lng!),
+            infoWindow: InfoWindow(title: address),
+          ),
+        );
+        print(myMarker);
+      });
     }
   }
 
