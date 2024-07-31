@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickcampus/screens/delivering_page.dart';
 import 'package:quickcampus/screens/home_page.dart';
 import 'package:quickcampus/screens/landing_page_one.dart';
 import 'package:quickcampus/screens/landing_page_two.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyNavigationBar(),
+      home: DeliveringPage(),
     );
   }
 }
