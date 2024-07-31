@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quickcampus/models/location.dart';
 import 'package:quickcampus/screens/delivering_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:http/http.dart' as http;
+import 'package:quickcampus/services/maps_services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,9 +21,11 @@ class _HomePageState extends State<HomePage> {
   final FocusNode _pickupFocusNode = FocusNode();
   final PanelController _panelController = PanelController();
   List<String> _pickupSuggestions = [];
-  List<Location> _placeDetails = [];
+  List<MyLocation> _placeDetails = [];
   Timer? _debounce;
   bool _showConfirmButton = true;
+  MyLocation? _selectedLocation;
+  late MapsService _mapsService;
 
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(5.7630902491463365, -0.2236314561684989),
@@ -43,6 +44,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     myMarker.addAll(markerList);
+    _mapsService = MapsService();
     _pickupController.addListener(_onPickupChanged);
     _pickupFocusNode.addListener(_onFocusChange);
   }
@@ -56,15 +58,20 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  // place request
+  // Place request
   void _placeRequest() {
-    _goToNextPage(context);
+    if (_pickupController.text.isNotEmpty && _selectedLocation != null) {
+      _goToNextPage(context, _selectedLocation!);
+    }
   }
 
   // Next page
-  void _goToNextPage(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const DeliveringPage()));
+  void _goToNextPage(BuildContext context, MyLocation location) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => DeliveringPage(destination: location),
+      ),
+    );
   }
 
   void _onPickupChanged() {
@@ -72,7 +79,6 @@ class _HomePageState extends State<HomePage> {
     _debounce = Timer(const Duration(milliseconds: 500), () {
       if (_pickupController.text.isNotEmpty) {
         makeSuggestion(_pickupController.text);
-        print(_pickupSuggestions);
       }
     });
   }
@@ -83,56 +89,36 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Make suggestion for user
   void makeSuggestion(String input) async {
-    String tokenForSession = '37465';
-    String apiKey = "AIzaSyDrk905BDTiFuJhQxtfXdKUPTSDPgpiSrE";
-    String groundUrl =
-        "https://maps.googleapis.com/maps/api/place/autocomplete/json";
-    String request =
-        '$groundUrl?input=$input&key=$apiKey&sessiontoken=$tokenForSession';
-
-    var response = await http.get(Uri.parse(request));
-
-    if (response.statusCode == 200) {
-      List<String> suggestions = [];
-      var json = jsonDecode(response.body);
-      for (var prediction in json['predictions']) {
-        suggestions.add(prediction['description']);
-        getPlaceDetails(prediction['place_id']); // Fetch details
-      }
+    try {
+      List<MyLocation> suggestions = await _mapsService.fetchSuggestions(input);
       setState(() {
-        _pickupSuggestions = suggestions;
+        _pickupSuggestions =
+            suggestions.map((location) => location.name).toList();
+        _placeDetails = suggestions;
       });
-    } else {
-      print('Error: ${response.reasonPhrase}');
+    } catch (e) {
+      print('Error fetching suggestions: $e');
     }
   }
 
-  Future<void> getPlaceDetails(String placeId) async {
-    String apiKey = "YOUR_API_KEY_HERE";
-    String groundUrl =
-        "https://maps.googleapis.com/maps/api/place/details/json";
-    String request = '$groundUrl?place_id=$placeId&key=$apiKey';
-
-    var response = await http.get(Uri.parse(request));
-
-    if (response.statusCode == 200) {
-      var json = jsonDecode(response.body);
-      var result = json['result'];
-      var location = result['geometry']['location'];
-      var lat = location['lat'];
-      var lng = location['lng'];
-
+  // Get longitude and latitude from address to plot new marker
+  Future<void> _getLatLngFromAddress(String address) async {
+    MyLocation? location = await _mapsService.getLatLngFromAddress(address);
+    print("Get LatLng is printed");
+    if (location != null) {
       setState(() {
-        _placeDetails.add(Location(
-          name: result['name'],
-          address: result['formatted_address'],
-          lat: lat,
-          lng: lng,
-        ));
+        _selectedLocation = location;
+        myMarker.add(
+          Marker(
+            markerId: MarkerId(address),
+            position: LatLng(location.lat!, location.lng!),
+            infoWindow: InfoWindow(title: address),
+          ),
+        );
+        print(myMarker);
       });
-    } else {
-      print('Error: ${response.reasonPhrase}');
     }
   }
 
@@ -229,14 +215,18 @@ class _HomePageState extends State<HomePage> {
                                   itemBuilder: (context, index) {
                                     return ListTile(
                                       title: Text(_pickupSuggestions[index]),
-                                      onTap: () {
+                                      onTap: () async {
+                                        String selectedAddress =
+                                            _pickupSuggestions[index];
                                         setState(() {
                                           _pickupController.text =
-                                              _pickupSuggestions[index];
+                                              selectedAddress;
                                           _pickupSuggestions.clear();
-                                          _panelController
-                                              .close(); // Close the panel after selection
                                         });
+                                        _panelController
+                                            .close(); // Close the panel after selection
+                                        await _getLatLngFromAddress(
+                                            selectedAddress);
                                       },
                                     );
                                   },

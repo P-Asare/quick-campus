@@ -40,6 +40,9 @@ dependencies:
   # google maps
   google_maps_flutter:
 
+  # location
+  geocoding:
+
   # sliding panel
   sliding_up_panel:
 

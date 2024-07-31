@@ -2,11 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:quickcampus/models/location.dart';
 import 'package:quickcampus/widgets/delivery_status.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class DeliveringPage extends StatefulWidget {
-  const DeliveringPage({super.key});
+  final MyLocation destination;
+
+  const DeliveringPage({
+    super.key,
+    required this.destination,
+  });
 
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(5.7630902491463365, -0.2236314561684989),
@@ -20,12 +26,33 @@ class DeliveringPage extends StatefulWidget {
 class _DeliveringPageState extends State<DeliveringPage> {
   final Completer<GoogleMapController> _controller = Completer();
   final PanelController _panelController = PanelController();
+  List<Marker> myMarker = [];
+  List<Marker> markerList = [];
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _panelController.open();
+    });
+    _initialiseMarkerList();
+    myMarker.addAll(markerList);
+  }
+
+  // initialise markers
+  void _initialiseMarkerList() {
+    setState(() {
+      markerList = [
+        const Marker(
+          markerId: MarkerId('home'),
+          position: LatLng(5.7630902491463365, -0.2236314561684989),
+          infoWindow: InfoWindow(title: "The hill"),
+        ),
+        Marker(
+            markerId: MarkerId(widget.destination.name),
+            position: LatLng(widget.destination.lat!, widget.destination.lng!),
+            infoWindow: InfoWindow(title: widget.destination.name))
+      ];
     });
   }
 
@@ -43,6 +70,7 @@ class _DeliveringPageState extends State<DeliveringPage> {
             GoogleMap(
               initialCameraPosition: DeliveringPage._initialPosition,
               mapType: MapType.normal,
+              markers: Set<Marker>.of(myMarker),
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
               },
@@ -70,7 +98,7 @@ class _DeliveringPageState extends State<DeliveringPage> {
               controller: _panelController,
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(20.0)),
-              minHeight: 30,
+              minHeight: 50,
               maxHeight: 430,
               panel: Center(
                   child: Padding(
