@@ -56,9 +56,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // place request
-  void _placeRequest(){
-
-  }
+  void _placeRequest() {}
 
   void _onPickupChanged() {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -185,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                             fontSize: 14,
                           ),
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 20),
                         TextField(
                           controller: _pickupController,
                           focusNode: _pickupFocusNode,
