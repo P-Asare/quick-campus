@@ -21,6 +21,11 @@ class _DeliveringPageState extends State<DeliveringPage> {
 
   final PanelController _panelController = PanelController();
 
+  // Go to previous page
+  void _goBack(BuildContext context) {
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -40,7 +45,7 @@ class _DeliveringPageState extends State<DeliveringPage> {
               top: 20,
               left: 10,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () => _goBack(context),
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: const BoxDecoration(
