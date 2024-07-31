@@ -1,13 +1,16 @@
 // Location class to store location object
-class Location {
+class MyLocation {
   final String name;
-  final String address;
-  final double lat;
-  final double lng;
+  final String? address;
+  final double? lat;
+  final double? lng;
+  final String? placeId;
 
-  Location(
-      {required this.name,
-      required this.address,
-      required this.lat,
-      required this.lng});
+  MyLocation({
+    required this.name,
+    this.address,
+    this.lat,
+    this.lng,
+    this.placeId,
+  });
 }

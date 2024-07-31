@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:quickcampus/models/location.dart';
 import 'package:quickcampus/screens/delivering_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   final FocusNode _pickupFocusNode = FocusNode();
   final PanelController _panelController = PanelController();
   List<String> _pickupSuggestions = [];
-  List<Location> _placeDetails = [];
+  List<MyLocation> _placeDetails = [];
   Timer? _debounce;
   bool _showConfirmButton = true;
 
@@ -56,8 +57,11 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  // place request
+  // Place request
   void _placeRequest() {
+    if (_pickupController.text.isNotEmpty) {
+      _getLatLngFromAddress(_pickupController.text);
+    }
     _goToNextPage(context);
   }
 
@@ -72,7 +76,6 @@ class _HomePageState extends State<HomePage> {
     _debounce = Timer(const Duration(milliseconds: 500), () {
       if (_pickupController.text.isNotEmpty) {
         makeSuggestion(_pickupController.text);
-        print(_pickupSuggestions);
       }
     });
   }
@@ -94,45 +97,40 @@ class _HomePageState extends State<HomePage> {
     var response = await http.get(Uri.parse(request));
 
     if (response.statusCode == 200) {
-      List<String> suggestions = [];
       var json = jsonDecode(response.body);
-      for (var prediction in json['predictions']) {
-        suggestions.add(prediction['description']);
-        getPlaceDetails(prediction['place_id']); // Fetch details
-      }
       setState(() {
-        _pickupSuggestions = suggestions;
+        _pickupSuggestions = (json['predictions'] as List)
+            .map<String>((prediction) => prediction['description'] as String)
+            .toList();
+        _placeDetails = (json['predictions'] as List)
+            .map<MyLocation>((prediction) => MyLocation(
+                  name: prediction['description'] as String,
+                  placeId: prediction['place_id'] as String,
+                ))
+            .toList();
       });
     } else {
       print('Error: ${response.reasonPhrase}');
     }
   }
 
-  Future<void> getPlaceDetails(String placeId) async {
-    String apiKey = "YOUR_API_KEY_HERE";
-    String groundUrl =
-        "https://maps.googleapis.com/maps/api/place/details/json";
-    String request = '$groundUrl?place_id=$placeId&key=$apiKey';
-
-    var response = await http.get(Uri.parse(request));
-
-    if (response.statusCode == 200) {
-      var json = jsonDecode(response.body);
-      var result = json['result'];
-      var location = result['geometry']['location'];
-      var lat = location['lat'];
-      var lng = location['lng'];
-
-      setState(() {
-        _placeDetails.add(Location(
-          name: result['name'],
-          address: result['formatted_address'],
-          lat: lat,
-          lng: lng,
-        ));
-      });
-    } else {
-      print('Error: ${response.reasonPhrase}');
+  Future<void> _getLatLngFromAddress(String address) async {
+    try {
+      List<Location> locations = await locationFromAddress(address);
+      if (locations.isNotEmpty) {
+        Location location = locations.first;
+        setState(() {
+          myMarker.add(
+            Marker(
+              markerId: MarkerId(address),
+              position: LatLng(location.latitude, location.longitude),
+              infoWindow: InfoWindow(title: address),
+            ),
+          );
+        });
+      }
+    } catch (e) {
+      print('Error getting location from address: $e');
     }
   }
 
@@ -229,14 +227,18 @@ class _HomePageState extends State<HomePage> {
                                   itemBuilder: (context, index) {
                                     return ListTile(
                                       title: Text(_pickupSuggestions[index]),
-                                      onTap: () {
+                                      onTap: () async {
+                                        String selectedAddress =
+                                            _pickupSuggestions[index];
                                         setState(() {
                                           _pickupController.text =
-                                              _pickupSuggestions[index];
+                                              selectedAddress;
                                           _pickupSuggestions.clear();
-                                          _panelController
-                                              .close(); // Close the panel after selection
                                         });
+                                        _panelController
+                                            .close(); // Close the panel after selection
+                                        await _getLatLngFromAddress(
+                                            selectedAddress);
                                       },
                                     );
                                   },
