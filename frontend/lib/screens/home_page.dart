@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quickcampus/models/location.dart';
+import 'package:quickcampus/screens/delivering_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:http/http.dart' as http;
@@ -56,7 +57,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   // place request
-  void _placeRequest() {}
+  void _placeRequest() {
+    _goToNextPage(context);
+  }
+
+  // Next page
+  void _goToNextPage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const DeliveringPage()));
+  }
 
   void _onPickupChanged() {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
