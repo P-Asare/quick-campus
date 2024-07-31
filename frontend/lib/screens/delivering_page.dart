@@ -18,8 +18,15 @@ class DeliveringPage extends StatefulWidget {
 
 class _DeliveringPageState extends State<DeliveringPage> {
   final Completer<GoogleMapController> _controller = Completer();
-
   final PanelController _panelController = PanelController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _panelController.open();
+    });
+  }
 
   // Go to previous page
   void _goBack(BuildContext context) {
