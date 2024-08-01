@@ -53,6 +53,12 @@ class ValidationMiddleWare
                             $errors[$field] = "$field must be a decimal number";
                         }
                         break;
+                    
+                    case 'phone_number':
+                        if (!preg_match('/^\d{10,15}$/', $value)) {
+                            $errors[$field] = "Invalid phone number";
+                        }
+                        break;
                 }
             }
         }

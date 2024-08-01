@@ -23,6 +23,7 @@ class UserController
                 $data['email'],
                 $data['password'],
                 $data['role'],
+                $data['phone_number']
             );
 
             return ['success' => true];
