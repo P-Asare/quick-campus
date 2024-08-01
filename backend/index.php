@@ -145,6 +145,11 @@
     });
 
     // get delivery requests by a user Id for both riders and students
+    $router->map('GET', '/pending_requests', function () use ($requestController){
+        echo json_encode($requestController->getAllPendingRequests());
+    });
+
+    // get delivery requests by a user Id for both riders and students
     $router->map('GET', '/requests/[i:user_role]/[i:user_id]', function ($user_role, $user_id) use ($requestController){
 
         ValidationMiddleWare::handle(
