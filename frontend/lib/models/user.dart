@@ -6,7 +6,7 @@ class User {
   String firstName;
   String lastName;
   String email;
-  String roleId;
+  String role;
   String phoneNumber;
   String? profileImage;
 
@@ -15,7 +15,7 @@ class User {
     required this.firstName,
     required this.lastName,
     required this.email,
-    required this.roleId,
+    required this.role,
     required this.phoneNumber,
     required this.profileImage,
   });
@@ -27,7 +27,7 @@ class User {
           firstName: json['firstname'],
           lastName: json['lastname'],
           email: json['email'],
-          roleId: json['role_id'],
+          role: json['role'],
           phoneNumber: json['phone_number'],
           profileImage: json['profile_image']);
     } catch (e) {
@@ -41,7 +41,7 @@ class User {
       'firstname': firstName,
       'lastname': lastName,
       'email': email,
-      'role_id': roleId,
+      'role': role,
       'phone_number': phoneNumber,
       'profile_image': profileImage
     };
