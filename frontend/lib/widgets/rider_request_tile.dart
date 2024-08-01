@@ -15,9 +15,7 @@ class RiderRequestTile extends StatelessWidget {
   });
 
   // function to accept a request
-  void _acceptRequest(){
-
-  }
+  void _acceptRequest() {}
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +25,8 @@ class RiderRequestTile extends StatelessWidget {
       padding: const EdgeInsets.only(
         left: 16,
         right: 16,
-        top: 12,
-        bottom: 12,
+        top: 9,
+        bottom: 9,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -45,7 +43,7 @@ class RiderRequestTile extends StatelessWidget {
             children: [
               // From and To Columns
               Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 25),
+                padding: const EdgeInsets.only(top: 2.0, left: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -66,7 +64,7 @@ class RiderRequestTile extends StatelessWidget {
                           style: const TextStyle(color: Colors.grey),
                         ),
 
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 15),
 
                         // To
                         Text(to,

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickcampus/providers/auth_provider.dart';
 import 'package:quickcampus/screens/otp_page.dart';
+import 'package:quickcampus/services/otp_service.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -13,6 +16,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -33,6 +37,15 @@ class _SignUpPageState extends State<SignUpPage> {
   String? _validateLastName(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your last name';
+    }
+    return null;
+  }
+
+  String? _validatePhone(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your phone number';
+    } else if (!RegExp(r'^233[1-9][0-9]{8}$').hasMatch(value)) {
+      return 'Phone number must be in the format "233" followed by 9 digits, e.g., 233599968996';
     }
     return null;
   }
@@ -89,10 +102,23 @@ class _SignUpPageState extends State<SignUpPage> {
 
   // Register user and route to homepage
   void _register() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // Form is valid, proceed with registration
-      print('Registration successful');
+    // Form is valid, proceed with registration
 
+    if (_formKey.currentState?.validate() ?? false) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+      // Store registration details in AuthProvider
+      authProvider.setRegistrationDetails({
+        'firstname': _firstNameController.text,
+        'lastname': _lastNameController.text,
+        'email': _emailController.text,
+        'phone_number': _phoneController.text,
+        'confirm_password': _confirmPasswordController.text,
+        'password': _passwordController.text,
+      });
+
+      OTPService.sendOTP(_emailController.text);
+      print(OTPService.getOtp());
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => OtpPage(email: _emailController.text),
       ));
@@ -267,6 +293,47 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: _validateEmail,
+                  cursorColor: Colors.black,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  "Phone number",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: _phoneController,
+                  decoration: InputDecoration(
+                    hintText: "233*********",
+                    suffixIcon: const Icon(
+                      Icons.phone,
+                      color: Color.fromARGB(255, 105, 105, 105),
+                    ),
+                    filled: true,
+                    fillColor: const Color(0x59D9D9D9),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 23, horizontal: 20.0),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(1.0),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF307A59),
+                        width: 2.0,
+                      ),
+                    ),
+                    errorStyle: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 12,
+                    ),
+                  ),
+                  keyboardType: TextInputType.phone,
+                  validator: _validatePhone,
                   cursorColor: Colors.black,
                 ),
                 // Spacing

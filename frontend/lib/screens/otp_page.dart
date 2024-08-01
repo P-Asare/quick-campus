@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickcampus/providers/auth_provider.dart';
+import 'package:quickcampus/screens/role_pick_page.dart';
 import 'package:quickcampus/screens/verified_page.dart';
+import 'package:quickcampus/services/otp_service.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 
 class OtpPage extends StatefulWidget {
@@ -58,9 +62,9 @@ class OtpPageState extends State<OtpPage> {
     }
   }
 
-  void _goToVerifiedPage() {
+  void _goToRolePage() {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const VerifiedPage()));
+        .push(MaterialPageRoute(builder: (context) => RolePickPage()));
   }
 
   // Verify otp and move to next field
@@ -70,11 +74,26 @@ class OtpPageState extends State<OtpPage> {
         _codeController3.text +
         _codeController4.text;
 
-    _goToVerifiedPage();
+    print(otpCode);
+    bool isValid = OTPService.verifyOTP(otpCode);
+
+    if (isValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('OTP verified successfully!')),
+      );
+
+      _goToRolePage();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid OTP! Please try again.')),
+      );
+    }
   }
 
   // Resend otp to email
-  void _resendOTP() {}
+  void _resendOTP() {
+    OTPService.sendOTP(widget.email);
+  }
 
   @override
   Widget build(BuildContext context) {

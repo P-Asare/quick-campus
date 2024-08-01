@@ -12,6 +12,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         toolbarHeight: 70,
         centerTitle: true,
