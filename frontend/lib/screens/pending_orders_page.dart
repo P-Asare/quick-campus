@@ -7,30 +7,33 @@ import 'package:quickcampus/providers/request_provider.dart';
 import 'package:quickcampus/services/maps_services.dart';
 import 'package:quickcampus/widgets/rider_request_tile.dart';
 
-class RiderHomePage extends StatefulWidget {
-  const RiderHomePage({super.key});
+class PendingOrdersPage extends StatefulWidget {
+  const PendingOrdersPage({super.key});
 
   @override
-  State<RiderHomePage> createState() => _RiderHomePageState();
+  State<PendingOrdersPage> createState() => _PendingOrdersPageState();
 }
 
-class _RiderHomePageState extends State<RiderHomePage> {
+class _PendingOrdersPageState extends State<PendingOrdersPage> {
   final MapsService _mapsService = MapsService();
   User? currentUser;
 
   @override
   void initState() {
     super.initState();
-    // Fetch pending requests when the page is initialized
-    Provider.of<RequestProvider>(context, listen: false)
-        .fetchAllPendingRequests();
-
+    // Fetch pending requests made by the current user when the page is initialized
     currentUser = Provider.of<AuthProvider>(context, listen: false).user;
+    if (currentUser != null) {
+      Provider.of<RequestProvider>(context, listen: false)
+          .fetchPendingRequests(currentUser!.userId);
+    }
   }
 
   Future<void> _refreshRequests() async {
-    await Provider.of<RequestProvider>(context, listen: false)
-        .fetchAllPendingRequests();
+    if (currentUser != null) {
+      await Provider.of<RequestProvider>(context, listen: false)
+          .fetchPendingRequests(currentUser!.userId);
+    }
   }
 
   @override
@@ -39,28 +42,6 @@ class _RiderHomePageState extends State<RiderHomePage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        toolbarHeight: 70,
-        centerTitle: true,
-        title: const Text(
-          "Home",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1.0),
-          child: Container(
-            color: const Color(0xFFD1E2DB),
-            height: 1.0,
-          ),
-        ),
-      ),
       body: requestProvider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
@@ -68,15 +49,14 @@ class _RiderHomePageState extends State<RiderHomePage> {
               onRefresh: _refreshRequests,
               child: ListView.builder(
                 padding: const EdgeInsets.all(20),
-                itemCount: requestProvider.pendingRequests.length,
+                itemCount: requestProvider.userPendingRuests.length,
                 itemBuilder: (context, index) {
-                  if (requestProvider.pendingRequests.isEmpty) {
-                    print("empty");
+                  if (requestProvider.userPendingRuests.isEmpty) {
                     return const Center(child: Icon(Icons.pedal_bike));
                   }
 
                   // Request in specific location
-                  final request = requestProvider.pendingRequests[index];
+                  final request = requestProvider.userPendingRuests[index];
 
                   return FutureBuilder(
                     future: _fetchLocationDetails(request),
@@ -94,20 +74,12 @@ class _RiderHomePageState extends State<RiderHomePage> {
                       final locations = snapshot.data!;
                       return Column(
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              print("Accept request");
-                              requestProvider.confirmPendingRequest(
-                                  request.pendingId, currentUser!.userId);
-                            },
-                            child: RiderRequestTile(
-                              from: locations['fromName'] ?? 'Unknown',
-                              fromAddress:
-                                  locations['fromAddress'] ?? 'Unknown',
-                              to: locations['toName'] ?? 'Unknown',
-                              toAddress: locations['toAddress'] ?? 'Unknown',
-                              hide: false,
-                            ),
+                          RiderRequestTile(
+                            from: locations['fromName'] ?? 'Unknown',
+                            fromAddress: locations['fromAddress'] ?? 'Unknown',
+                            to: locations['toName'] ?? 'Unknown',
+                            toAddress: locations['toAddress'] ?? 'Unknown',
+                            hide: true,
                           ),
                           const SizedBox(height: 15),
                         ],

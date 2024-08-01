@@ -7,7 +7,6 @@ class OrderTile extends StatelessWidget {
   final String to;
   final String toAddress;
   final String driver;
-  final double rating;
   final bool onGoing;
 
   const OrderTile({
@@ -18,7 +17,6 @@ class OrderTile extends StatelessWidget {
     required this.to,
     required this.toAddress,
     required this.driver,
-    required this.rating,
     required this.onGoing,
   });
 
@@ -29,8 +27,8 @@ class OrderTile extends StatelessWidget {
       padding: const EdgeInsets.only(
         left: 16,
         right: 16,
-        top: 12,
-        bottom: 12,
+        top: 5,
+        bottom: 5,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -97,7 +95,7 @@ class OrderTile extends StatelessWidget {
                       style: const TextStyle(color: Colors.grey),
                     ),
 
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
 
                     // To
                     Text(to,
@@ -113,7 +111,7 @@ class OrderTile extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
 
               // Driver profile
               ListTile(
@@ -128,12 +126,11 @@ class OrderTile extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: Row(
+                subtitle: const Row(
                   children: [
-                    Text("$rating"),
-                    const SizedBox(width: 4),
-                    const Icon(Icons.star,
-                        color: Color.fromARGB(141, 255, 193, 7)),
+                    SizedBox(width: 4),
+                    Icon(Icons.star,
+                      color: Color.fromARGB(141, 255, 193, 7)),
                   ],
                 ),
               ),

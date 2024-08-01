@@ -25,7 +25,8 @@ class RequestService {
 
   // Get requests not taken up by riders yet by a specific user
   Future<List<PendingRequest>> getPendingRequests(int userId) async {
-    final response = await http.get(Uri.parse("$_baseUrl/pending_requests/$userId"));
+    final response =
+        await http.get(Uri.parse("$_baseUrl/pending_requests/$userId"));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -42,8 +43,10 @@ class RequestService {
   }
 
   //Get requests that have been taken up by riders
-  Future<List<ConfirmedRequest>> getConfirmedRequests(int userRole, int userId) async {
-    final response = await http.get(Uri.parse("$_baseUrl/requests/$userRole/$userId"));
+  Future<List<ConfirmedRequest>> getConfirmedRequests(
+      int userRole, int userId) async {
+    final response =
+        await http.get(Uri.parse("$_baseUrl/requests/$userRole/$userId"));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -60,7 +63,8 @@ class RequestService {
   }
 
   // Place the pending requests
-  Future<PendingRequest> placePendingRequest(int studentId, double latitude, double longitude) async {
+  Future<PendingRequest> placePendingRequest(
+      int studentId, double latitude, double longitude) async {
     final response = await http.post(
       Uri.parse("$_baseUrl/requests"),
       headers: {"Content-Type": "application/json"},
@@ -90,7 +94,8 @@ class RequestService {
   }
 
   // Confirm a pending request
-  Future<ConfirmedRequest> confirmPendingRequest(int pendingRequestId, int riderId) async {
+  Future<ConfirmedRequest> confirmPendingRequest(
+      int pendingRequestId, int riderId) async {
     final response = await http.post(
       Uri.parse("$_baseUrl/confirm_requests"),
       headers: {"Content-Type": "application/json"},

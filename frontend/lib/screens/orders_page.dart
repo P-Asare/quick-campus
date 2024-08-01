@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickcampus/screens/pending_orders_page.dart';
 import 'package:quickcampus/screens/sending_page.dart';
 
 class OrdersPage extends StatefulWidget {
@@ -21,6 +22,7 @@ class _OrdersPageState extends State<OrdersPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         toolbarHeight: 12,
         backgroundColor: Colors.white,
@@ -39,10 +41,10 @@ class _OrdersPageState extends State<OrdersPage>
           controller: _tabController,
           tabs: const [
             // sending tab
-            Tab(text: 'Sending'),
+            Tab(text: 'Confirmed'),
 
             // deliverigng tab
-            Tab(text: 'Delivering'),
+            Tab(text: 'Pending'),
           ],
         ),
       ),
@@ -50,13 +52,9 @@ class _OrdersPageState extends State<OrdersPage>
         controller: _tabController,
         children: const [
           SendingPage(),
-          Center(
-            child: Text("other"),
-          )
+          PendingOrdersPage(),
         ],
       ),
     );
   }
 }
-
-

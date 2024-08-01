@@ -75,13 +75,17 @@ class _HomePageState extends State<HomePage> {
           .placePendingRequest(userId, latitude, longitude);
 
       // Move to the orders page
-      _goToOrdersPage(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content:
+                Text('Your request has been placed and is awaiting a rider')),
+      );
       //_goToNextPage(context, _selectedLocation!);
     }
   }
 
   // Go to orderpage
-  void _goToOrdersPage(BuildContext context){
+  void _goToOrdersPage(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const OrdersPage(),

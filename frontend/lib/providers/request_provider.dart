@@ -56,6 +56,7 @@ class RequestProvider with ChangeNotifier {
     try {
       _confirmedRequests =
           await _requestService.getConfirmedRequests(userRole, userId);
+      print(_confirmedRequests);
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
