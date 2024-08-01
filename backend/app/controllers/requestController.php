@@ -2,16 +2,19 @@
 
     require_once __DIR__ . '/../models/request.php';
     require_once __DIR__ . '/../models/pending_requests.php';
+    require_once __DIR__ . '/../models/status.php';
 
     /// Class to cater for all request oriented actions
     class RequestController{
 
         protected $requestModel;
         protected $pendingRequestModel;
+        protected $statusModel;
 
         public function __construct($pdo){
             $this->requestModel = new Request($pdo);
             $this->pendingRequestModel = new PendingRequest($pdo);
+            $this->statusModel = new Status($pdo);
         }
         
         // create a delivery request
@@ -48,6 +51,7 @@
                 $this->pendingRequestModel->deletePendingRequest($data['pending_id']);
                 $request_id = $this->requestModel->createRequest($new_data);
                 $response_data = $this->requestModel->findRequestById($request_id);
+                $response_data['status'] = $this->statusModel->getStatusById($response_data['status'])["status_name"];
 
                 return [
                     'success' => true,
@@ -81,6 +85,7 @@
             try {
                 
                 $requests = $this->requestModel->findRequestsByUser($column, $user_id);
+                $requests[0]['status'] = $this->statusModel->getStatusById($requests[0]['status'])["status_name"];
                 return ['success' => true, 'data' => $requests];
 
             } catch (\Exception $e) {

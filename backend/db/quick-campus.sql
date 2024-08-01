@@ -37,8 +37,10 @@ CREATE TABLE requests (
     dropoff_latitude DECIMAL(9,6),
     dropoff_longitude DECIMAL(9,6),
     created_at DATE DEFAULT CURRENT_DATE,
+    status INT DEFAULT 1,
     FOREIGN KEY (student_id) REFERENCES users(user_id),
-    FOREIGN KEY (rider_id) REFERENCES users(user_id)
+    FOREIGN KEY (rider_id) REFERENCES users(user_id),
+    FOREIGN KEY (status) REFERENCES status(status_id)
 );
 
 -- Create the ratings table
@@ -69,6 +71,7 @@ INSERT INTO roles (role_name) VALUES
 
 -- Insert default statuses
 INSERT INTO status (status_name) VALUES
+('begin'),
 ('picked'),
 ('arriving'),
 ('delivered'),
