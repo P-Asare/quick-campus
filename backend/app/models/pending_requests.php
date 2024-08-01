@@ -35,6 +35,11 @@
 
             return $this->delete('pending_id', $pending_id);
         }
+
+        // Fetch all pending requests
+        public function fetchAllPendingRequests(){
+            return $this->all();
+        }
     }
 
 ?>
