@@ -25,8 +25,8 @@ class RiderOrderTile extends StatelessWidget {
       padding: const EdgeInsets.only(
         left: 16,
         right: 16,
-        top: 12,
-        bottom: 12,
+        top: 5,
+        bottom: 5,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -113,7 +113,7 @@ class RiderOrderTile extends StatelessWidget {
           ),
           Positioned(
             left: -50,
-            top: -285, // Vertically center the image
+            top: -265, // Vertically center the image
             child: Image.asset(
               'assets/images/location-path.png', // Replace with your actual image path
               width: 120,
