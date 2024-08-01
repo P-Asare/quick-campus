@@ -59,6 +59,11 @@ class UserController
                 return [
                     "success" => true, 
                     "id" => $db_details['user_id'],
+                    "firstname" => $db_details['firstname'],
+                    "lastname" => $db_details['lastname'],
+                    "email" => $db_details['email'],
+                    "phone_number" => $db_details["phone_number"],
+                    "profile_image" => $db_details["profile_image"],
                     "role" => $db_details['role_id']
                 ];
             } else {
