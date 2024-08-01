@@ -41,12 +41,11 @@ class _SignUpPageState extends State<SignUpPage> {
     return null;
   }
 
-  // Validate phone number
   String? _validatePhone(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your phone number';
-    } else if (!RegExp(r'^\+233[0-9]{9}$').hasMatch(value)) {
-      return 'Phone number must start with +233 and be 12 digits long';
+    } else if (!RegExp(r'^233[1-9][0-9]{8}$').hasMatch(value)) {
+      return 'Phone number must be in the format "233" followed by 9 digits, e.g., 233599968996';
     }
     return null;
   }
@@ -104,7 +103,6 @@ class _SignUpPageState extends State<SignUpPage> {
   // Register user and route to homepage
   void _register() {
     // Form is valid, proceed with registration
-    print('Registration successful');
 
     if (_formKey.currentState?.validate() ?? false) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -114,7 +112,7 @@ class _SignUpPageState extends State<SignUpPage> {
         'firstname': _firstNameController.text,
         'lastname': _lastNameController.text,
         'email': _emailController.text,
-        'phone': _phoneController.text,
+        'phone_number': _phoneController.text,
         'confirm_password': _confirmPasswordController.text,
         'password': _passwordController.text,
       });
@@ -309,7 +307,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 TextFormField(
                   controller: _phoneController,
                   decoration: InputDecoration(
-                    hintText: "Enter your phone number",
+                    hintText: "233*********",
                     suffixIcon: const Icon(
                       Icons.phone,
                       color: Color.fromARGB(255, 105, 105, 105),

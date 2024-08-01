@@ -5,8 +5,14 @@ class AuthService {
   final String baseUrl = "http://16.171.150.101/quick-campus/backend";
 
   // Register users
-  Future<Map<String, dynamic>> register(String firstname, String lastname,
-      String email, String password, String confirmPassword, int role, String phoneNumber) async {
+  Future<Map<String, dynamic>> register(
+      String firstname,
+      String lastname,
+      String email,
+      String password,
+      String confirmPassword,
+      int role,
+      String phoneNumber) async {
     final response = await http.post(Uri.parse('$baseUrl/users'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
@@ -18,6 +24,8 @@ class AuthService {
           'role': role,
           "phone_number": phoneNumber
         }));
+
+    print(response.body);
 
     if (response.statusCode == 500 || response.statusCode == 503) {
       throw Exception("Server error");

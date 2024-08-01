@@ -26,6 +26,12 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
+// Add new registration details
+  void addRegistrationDetails(Map<String, String> details) {
+    _registrationDetails.addAll(details);
+    notifyListeners(); // Notify listeners about the changes
+  }
+
   // Set registration details
   void setRegistrationDetails(Map<String, String> details) {
     _registrationDetails = details;
@@ -76,6 +82,8 @@ class AuthProvider with ChangeNotifier {
         int.parse(_registrationDetails['role']!),
         _registrationDetails['phone_number']!,
       );
+
+      print(registerResponse);
 
       if (registerResponse['success'] == true) {
         _registrationSuccess = true;

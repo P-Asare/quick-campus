@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickcampus/screens/sign_in_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 import 'package:quickcampus/widgets/nav_bar.dart';
 
@@ -8,7 +9,7 @@ class VerifiedPage extends StatelessWidget {
   // route to home page
   void _goToNextPage(BuildContext context) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const MyNavigationBar()));
+        .push(MaterialPageRoute(builder: (context) => const SignInPage()));
   }
 
   @override

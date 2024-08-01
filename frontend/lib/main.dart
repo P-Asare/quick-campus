@@ -7,6 +7,7 @@ import 'package:quickcampus/screens/landing_page_one.dart';
 import 'package:quickcampus/screens/landing_page_two.dart';
 import 'package:quickcampus/screens/otp_page.dart';
 import 'package:quickcampus/screens/rider_screens/rider_home_page.dart';
+import 'package:quickcampus/screens/role_pick_page.dart';
 import 'package:quickcampus/screens/sign_in_page.dart';
 import 'package:quickcampus/screens/splash_screen.dart';
 import 'package:quickcampus/screens/verified_page.dart';

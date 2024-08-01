@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickcampus/providers/auth_provider.dart';
+import 'package:quickcampus/screens/role_pick_page.dart';
 import 'package:quickcampus/screens/verified_page.dart';
 import 'package:quickcampus/services/otp_service.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
@@ -61,9 +62,9 @@ class OtpPageState extends State<OtpPage> {
     }
   }
 
-  void _goToVerifiedPage() {
+  void _goToRolePage() {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const VerifiedPage()));
+        .push(MaterialPageRoute(builder: (context) => RolePickPage()));
   }
 
   // Verify otp and move to next field
@@ -81,7 +82,7 @@ class OtpPageState extends State<OtpPage> {
         const SnackBar(content: Text('OTP verified successfully!')),
       );
 
-      _goToVerifiedPage();
+      _goToRolePage();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Invalid OTP! Please try again.')),
