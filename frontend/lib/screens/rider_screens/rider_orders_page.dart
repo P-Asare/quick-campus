@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:quickcampus/widgets/rider_request_tile.dart';
+import 'package:quickcampus/widgets/rider_order_tile.dart';
 
-class RiderHomePage extends StatefulWidget {
-  const RiderHomePage({super.key});
+class RiderOrdersPage extends StatefulWidget {
+  const RiderOrdersPage({super.key});
 
   @override
-  State<RiderHomePage> createState() => _RiderHomePageState();
+  State<RiderOrdersPage> createState() => _RiderOrdersPageState();
 }
 
-class _RiderHomePageState extends State<RiderHomePage> {
+class _RiderOrdersPageState extends State<RiderOrdersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +16,7 @@ class _RiderHomePageState extends State<RiderHomePage> {
         toolbarHeight: 70,
         centerTitle: true,
         title: const Text(
-          "Home",
+          "Requests",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
@@ -40,11 +40,13 @@ class _RiderHomePageState extends State<RiderHomePage> {
           padding: EdgeInsets.all(20),
           child: Column(
             children: [
-              RiderRequestTile(
+              RiderOrderTile(
                 from: "West hills mall",
                 fromAddress: "new road Ave.",
                 to: "Ashesi University",
                 toAddress: "1 University Ave",
+                student: "Palal",
+                date: "2022-May-27",
               ),
 
               // spacing
@@ -52,11 +54,13 @@ class _RiderHomePageState extends State<RiderHomePage> {
                 height: 15,
               ),
 
-              RiderRequestTile(
+              RiderOrderTile(
                 from: "West hills mall",
                 fromAddress: "new road Ave.",
                 to: "Ashesi University",
                 toAddress: "1 University Ave",
+                student: "Palal",
+                date: "2022-May-27",
               ),
 
               SizedBox(

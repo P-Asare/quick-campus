@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:quickcampus/screens/home_page.dart';
 import 'package:quickcampus/screens/orders_page.dart';
 import 'package:quickcampus/screens/profile_page.dart';
+import 'package:quickcampus/screens/rider_screens/rider_home_page.dart';
+import 'package:quickcampus/screens/rider_screens/rider_orders_page.dart';
 
 class MyNavigationBar extends StatefulWidget {
   const MyNavigationBar({super.key});
@@ -12,8 +14,13 @@ class MyNavigationBar extends StatefulWidget {
 
 class _MyNavigationBarState extends State<MyNavigationBar> {
   int currentPage = 0;
+  int userRole = 2;
 
-  final List<Widget> riderPages = [];
+  final List<Widget> riderPages = [
+    const RiderHomePage(),
+    const RiderOrdersPage(),
+    const ProfilePage()
+  ];
 
   final List<Widget> pages = [
     const HomePage(),
@@ -24,7 +31,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[currentPage],
+      body: (userRole == 2) ? riderPages[currentPage] : pages[currentPage],
       bottomNavigationBar: Container(
         height: 80,
         decoration: BoxDecoration(
