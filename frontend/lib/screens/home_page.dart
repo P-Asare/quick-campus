@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
             content:
                 Text('Your request has been placed and is awaiting a rider')),
       );
-      //_goToNextPage(context, _selectedLocation!);
+      _goToNextPage(context, _selectedLocation!);
     }
   }
 
