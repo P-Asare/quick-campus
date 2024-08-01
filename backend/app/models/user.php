@@ -61,9 +61,14 @@ class User extends Model
 
     // Update user profile image
     public function updateProfileImage($id, $imagePath){
-        $sql = "UPDATE {$this->table} SET profile_Image = :profile_Image WHERE userId = :id";
+        $sql = "UPDATE {$this->table} SET profile_image = :profile_image WHERE user_id = :id";
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute(['profile_Image' => $imagePath, 'id' => $id]);
+        return $stmt->execute(['profile_image' => $imagePath, 'id' => $id]);
+    }
+
+    // Update user details
+    public function updateProfile($id, $data){
+        return $this->update($id, $data);
     }
 
     // update password

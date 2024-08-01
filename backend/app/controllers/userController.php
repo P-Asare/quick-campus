@@ -125,7 +125,7 @@ class UserController
         try {
             $result = $this->userModel->findProfileById($userId);
             if ($result) {
-                return $result;
+                return ["success" => true, "data" => $result];
             } else {
                 header('HTTP/1.1 404 Not Found');
                 return ["success" => false, "error" => "User not found"];
@@ -134,6 +134,12 @@ class UserController
             header('HTTP/1.1 422 Unprocessable Entity');
             return ["success" => false, "error" => $e->getMessage()];
         }
+    }
+
+    // Update profile based on id
+    public function updateProfile($id, $data){
+        $response = $this->userModel->updateProfile($id, $data);
+        return ["success" => true];
     }
 
     // upload user profile
