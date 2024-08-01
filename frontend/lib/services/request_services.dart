@@ -6,7 +6,24 @@ import 'dart:convert';
 class RequestService {
   final String _baseUrl = "http://16.171.150.101/quick-campus/backend";
 
-  // Get requests not taken up by riders yet
+  Future<List<PendingRequest>> getAllPendingRequests() async {
+    final response = await http.get(Uri.parse("$_baseUrl/pending_requests"));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success']) {
+        return (data['data'] as List)
+            .map((requestJson) => PendingRequest.fromJson(requestJson))
+            .toList();
+      } else {
+        throw Exception('Failed to load pending requests');
+      }
+    } else {
+      throw Exception('Failed to load pending requests');
+    }
+  }
+
+  // Get requests not taken up by riders yet by a specific user
   Future<List<PendingRequest>> getPendingRequests(int userId) async {
     final response = await http.get(Uri.parse("$_baseUrl/pending_requests/$userId"));
 

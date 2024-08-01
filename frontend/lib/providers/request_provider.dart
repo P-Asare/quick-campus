@@ -7,6 +7,7 @@ class RequestProvider with ChangeNotifier {
   final RequestService _requestService = RequestService();
 
   List<PendingRequest> _pendingRequests = [];
+  List<PendingRequest> _userPendingRequests = [];
   List<ConfirmedRequest> _confirmedRequests = [];
   bool _isLoading = false;
   String? _errorMessage;
@@ -16,13 +17,28 @@ class RequestProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
+  Future<void> fetchAllPendingRequests() async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      _pendingRequests = await _requestService.getAllPendingRequests();
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> fetchPendingRequests(int userId) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      _pendingRequests = await _requestService.getPendingRequests(userId);
+      _userPendingRequests = await _requestService.getPendingRequests(userId);
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
@@ -37,7 +53,8 @@ class RequestProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _confirmedRequests = await _requestService.getConfirmedRequests(userRole, userId);
+      _confirmedRequests =
+          await _requestService.getConfirmedRequests(userRole, userId);
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
@@ -46,7 +63,8 @@ class RequestProvider with ChangeNotifier {
     }
   }
 
-  Future<void> placePendingRequest(int studentId, double latitude, double longitude) async {
+  Future<void> placePendingRequest(
+      int studentId, double latitude, double longitude) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -69,7 +87,8 @@ class RequestProvider with ChangeNotifier {
 
     try {
       await _requestService.confirmPendingRequest(pendingRequestId, riderId);
-      await fetchConfirmedRequests(1, riderId); // Assuming userRole is 1 for riders
+      await fetchConfirmedRequests(
+          1, riderId); // Assuming userRole is 1 for riders
     } catch (e) {
       _errorMessage = e.toString();
     } finally {

@@ -9,8 +9,10 @@ class MapsService {
   final String tokenForSession = "37465";
 
   Future<List<MyLocation>> fetchSuggestions(String input) async {
-    String groundUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
-    String request = '$groundUrl?input=$input&key=$apiKey&sessiontoken=$tokenForSession';
+    String groundUrl =
+        "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+    String request =
+        '$groundUrl?input=$input&key=$apiKey&sessiontoken=$tokenForSession';
 
     var response = await http.get(Uri.parse(request));
 
@@ -26,6 +28,25 @@ class MapsService {
     } else {
       throw Exception('Failed to load suggestions');
     }
+  }
+
+  Future<MyLocation?> getAddressFromLatLng(double lat, double long) async {
+    try {
+
+      List<Placemark> placemark = await placemarkFromCoordinates(lat, long);
+
+      return MyLocation(
+        name: placemark.reversed.last.name!,
+        address: placemark.reversed.last.street!,
+        lat: lat,
+        lng: long,
+      );
+      
+    } catch (e) {
+      print('Error getting address from location: $e');
+    }
+
+    return null;
   }
 
   Future<MyLocation?> getLatLngFromAddress(String address) async {
