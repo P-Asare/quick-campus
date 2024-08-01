@@ -95,6 +95,22 @@
             }
         }
 
+        // Get all pending requests
+        public function getAllPendingRequests(){
+            
+            try {
+                
+                $pending_requests = $this->pendingRequestModel->fetchAllPendingRequests();
+                return ['success' => true, 'data' => $pending_requests];
+
+            } catch (\Exception $e) {
+                
+                header('HTTP/1.1 422 Unprocessable Entity');
+                $errors = ["success" => false, "error" => $e->getMessage()];
+                return $errors;
+            }
+        }
+
 
     }
 ?>
