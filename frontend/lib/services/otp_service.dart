@@ -6,9 +6,8 @@ class OTPService {
     EmailOTP.config(
       appName: 'QuickCampus',
       otpType: OTPType.numeric,
-      expiry: 30000,
       emailTheme: EmailTheme.v1,
-      appEmail: 'quickcampus.qc@gmail.com',
+      appEmail: 'pinopalal11@gmail.com',
       otpLength: 4,
     );
 
@@ -17,8 +16,8 @@ class OTPService {
       host: 'smtp.gmail.com',
       emailPort: EmailPort.port587,
       secureType: SecureType.tls,
-      username: 'quickcampus.qc@gmail.com',
-      password: r"Q$7XvRG$R6yK8Q",
+      username: 'pinopalal11@gmail.com',
+      password: r"jyjl gjxl llzc kbwc",
     );
 
     // Custom email template with your specified colors
@@ -42,5 +41,9 @@ class OTPService {
 
   static bool verifyOTP(String otp) {
     return EmailOTP.verifyOTP(otp: otp);
+  }
+
+  static String? getOtp() {
+    return EmailOTP.getOTP();
   }
 }
