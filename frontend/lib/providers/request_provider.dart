@@ -13,6 +13,7 @@ class RequestProvider with ChangeNotifier {
   String? _errorMessage;
 
   List<PendingRequest> get pendingRequests => _pendingRequests;
+  List<PendingRequest> get userPendingRuests => _userPendingRequests;
   List<ConfirmedRequest> get confirmedRequests => _confirmedRequests;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
