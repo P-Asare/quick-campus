@@ -13,6 +13,8 @@ class MyNavigationBar extends StatefulWidget {
 class _MyNavigationBarState extends State<MyNavigationBar> {
   int currentPage = 0;
 
+  final List<Widget> riderPages = [];
+
   final List<Widget> pages = [
     const HomePage(),
     const OrdersPage(),
