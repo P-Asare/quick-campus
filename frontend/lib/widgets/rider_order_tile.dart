@@ -113,7 +113,7 @@ class RiderOrderTile extends StatelessWidget {
           ),
           Positioned(
             left: -50,
-            top: -265, // Vertically center the image
+            top: -275, // Vertically center the image
             child: Image.asset(
               'assets/images/location-path.png', // Replace with your actual image path
               width: 120,
