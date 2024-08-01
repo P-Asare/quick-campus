@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quickcampus/providers/auth_provider.dart';
+import 'package:quickcampus/providers/request_provider.dart';
 import 'package:quickcampus/screens/delivering_page.dart';
 import 'package:quickcampus/screens/home_page.dart';
 import 'package:quickcampus/screens/landing_page_one.dart';
@@ -20,6 +21,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => RequestProvider())
       ],
       child: const MyApp(),
     ),
