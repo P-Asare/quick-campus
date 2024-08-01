@@ -39,7 +39,7 @@ class AuthService {
     final response = await http.post(Uri.parse('$baseUrl/users/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'password': password}));
-
+    print("The login response is: ${response.body}");
     if (response.statusCode == 500 || response.statusCode == 503) {
       throw Exception("Server error");
     } else {

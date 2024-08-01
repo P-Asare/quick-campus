@@ -6,7 +6,7 @@ class User {
   String firstName;
   String lastName;
   String email;
-  String role;
+  int role;
   String phoneNumber;
   String? profileImage;
 
@@ -23,7 +23,7 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     try {
       return User(
-          userId: json['user_id'],
+          userId: json['id'],
           firstName: json['firstname'],
           lastName: json['lastname'],
           email: json['email'],

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickcampus/providers/auth_provider.dart';
 import 'package:quickcampus/screens/home_page.dart';
 import 'package:quickcampus/screens/orders_page.dart';
 import 'package:quickcampus/screens/profile_page.dart';
@@ -14,7 +16,6 @@ class MyNavigationBar extends StatefulWidget {
 
 class _MyNavigationBarState extends State<MyNavigationBar> {
   int currentPage = 0;
-  int userRole = 2;
 
   final List<Widget> riderPages = [
     const RiderHomePage(),
@@ -29,9 +30,18 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final user = Provider.of<AuthProvider>(context).user;
+    final int userRole = user!.role;
+
     return Scaffold(
-      body: (userRole == 2) ? riderPages[currentPage] : pages[currentPage],
+      body: (userRole == 3) ? riderPages[currentPage] : pages[currentPage],
       bottomNavigationBar: Container(
         height: 80,
         decoration: BoxDecoration(

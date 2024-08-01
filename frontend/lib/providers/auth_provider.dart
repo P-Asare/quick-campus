@@ -45,16 +45,19 @@ class AuthProvider with ChangeNotifier {
   }
 
   // User login
+  // TODO: Revise lag in log in
   Future<void> login(String email, String password) async {
     setLoading(true);
     try {
       final loginResponse = await _authService.login(email, password);
 
+      print(loginResponse);
       if (loginResponse['success'] == true) {
         _loginSuccess = true;
 
         // Parse user data from the response
         _user = User.fromJson(loginResponse);
+        notifyListeners();
       } else {
         _loginSuccess = false;
         _errorMessage = loginResponse['error'];
