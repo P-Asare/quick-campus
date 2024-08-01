@@ -1,6 +1,8 @@
 // Login page
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quickcampus/providers/auth_provider.dart';
 import 'package:quickcampus/screens/forget_password.dart';
 import 'package:quickcampus/screens/sign_up_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
@@ -61,11 +63,21 @@ class _SignInPageState extends State<SignInPage> {
   // Log user in (route to home)
   void _login() {
     if (_formKey.currentState?.validate() ?? false) {
+
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      authProvider.login(_emailController.text, _passwordController.text);
+
+      if(authProvider.loginSuccess == false){
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Wrong email or password')),
+        );
+      } else {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const MyNavigationBar()));
+      }
       // Form is valid, proceed with login
       print('Login successful');
 
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const MyNavigationBar()));
     } else {
       // Form is invalid, show errors
       print('Login failed');
