@@ -41,7 +41,8 @@
             'email' => 'email',
             'password' => 'password',
             'confirm_password' => 'confirm_password',
-            'role' => 'integer'
+            'role' => 'integer',
+            'phone_number' => 'phone_number'
         ]);
 
         echo json_encode($userController->createUser($data));
@@ -61,23 +62,86 @@
         echo json_encode($userController->login($data));
     });
 
-    // Place a delivery request
+    // Get a specific user (For getting the details of a rider)
+    $router->map('GET', '/users/[i:user_id]', function ($user_id) use ($userController) {
+
+        ValidationMiddleWare::handle(
+            ["user_id" => $user_id],
+            ["user_id" => "integer"]
+        );
+
+        echo json_encode($userController->getUserById($user_id));
+    });
+
+    // Catering for uploading the photo of a user
+    $router->map('POST', '/upload/[*:user_id]', function ($user_id) use ($userController) {
+
+        $file = $_FILES['profile_image'];
+
+        ValidationMiddleWare::handle(["user_id" => $user_id], ["user_id" => "integer"]);
+        ValidationMiddleWare::handleImage($file);
+
+        echo json_encode($userController->uploadProfileImage($user_id));
+    });
+
+    // Catering for user updates
+    $router->map('POST', '/users/update/[*:user_id]', function ($user_id) use ($userController){
+
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        ValidationMiddleWare::handle(
+            ["user_id" => $user_id],
+            ["user_id" =>"integer"]
+        );
+
+        ValidationMiddleWare::handle($data, [
+            "firstname" => "string",
+            "lastname" => "string",
+            "phone_number" => "phone_number"
+        ]
+        );
+
+        echo json_encode($userController->updateProfile($user_id, $data));
+    });
+
+    // Place a pending delivery request
     $router->map('POST', '/requests', function () use ($requestController){
 
         $data = json_decode(file_get_contents('php://input'), true);
         
         ValidationMiddleWare::handle($data, [
             'student_id' => 'integer',
-            'rider_id' => 'integer',
-            'request_type' => 'string',
-            'pickup_latitude' => 'decimal',
-            'pickup_longitude' => 'decimal',
             'dropoff_latitude' => 'decimal',
             'dropoff_longitude' => 'decimal',
-            'status_id' => 'integer'
+        ]);
+
+        echo json_encode($requestController->placePendingRequest($data));
+    });
+
+    // Confirm request: Rider endpoint to take up a request
+    $router->map('POST', '/confirm_requests', function () use ($requestController) {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        ValidationMiddleWare::handle($data, [
+            'pending_id' => 'integer',
+            'rider_id' => 'integer',
         ]);
 
         echo json_encode($requestController->placeRequest($data));
+    });
+
+    // Get the pending requests of a student
+    // get delivery requests by a user Id for both riders and students
+    $router->map('GET', '/pending_requests/[i:user_id]', function ($user_id) use ($requestController){
+
+        ValidationMiddleWare::handle(
+            ["user_id" => $user_id], 
+            [
+                "user_id" => "integer",
+            ]
+        );
+
+        echo json_encode($requestController->getPendingRequestsByUser($user_id));
     });
 
     // get delivery requests by a user Id for both riders and students
@@ -92,7 +156,7 @@
         );
 
         if ($user_role == 2){
-            echo json_encode($requestController->getRequestsByUser("user_id", $user_id));
+            echo json_encode($requestController->getRequestsByUser("student_id", $user_id));
         } else if ($user_role == 3) {
             echo json_encode($requestController->getRequestsByUser("rider_id", $user_id));
         }

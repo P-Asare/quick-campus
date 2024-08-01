@@ -45,7 +45,7 @@ class Model
         }
         $fields = rtrim($fields, ", ");
 
-        $sql = "UPDATE {$this->table} SET $fields WHERE id = :id"; // construct sql command
+        $sql = "UPDATE {$this->table} SET $fields WHERE user_id = :id"; // construct sql command
         $stmt = $this->pdo->prepare($sql);
         $data['id'] = $id; // Include id into data so that its value can be replaced with its placeholder
 

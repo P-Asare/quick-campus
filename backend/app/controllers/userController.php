@@ -23,6 +23,7 @@ class UserController
                 $data['email'],
                 $data['password'],
                 $data['role'],
+                $data['phone_number']
             );
 
             return ['success' => true];
@@ -58,6 +59,11 @@ class UserController
                 return [
                     "success" => true, 
                     "id" => $db_details['user_id'],
+                    "firstname" => $db_details['firstname'],
+                    "lastname" => $db_details['lastname'],
+                    "email" => $db_details['email'],
+                    "phone_number" => $db_details["phone_number"],
+                    "profile_image" => $db_details["profile_image"],
                     "role" => $db_details['role_id']
                 ];
             } else {
@@ -119,7 +125,7 @@ class UserController
         try {
             $result = $this->userModel->findProfileById($userId);
             if ($result) {
-                return $result;
+                return ["success" => true, "data" => $result];
             } else {
                 header('HTTP/1.1 404 Not Found');
                 return ["success" => false, "error" => "User not found"];
@@ -128,6 +134,12 @@ class UserController
             header('HTTP/1.1 422 Unprocessable Entity');
             return ["success" => false, "error" => $e->getMessage()];
         }
+    }
+
+    // Update profile based on id
+    public function updateProfile($id, $data){
+        $response = $this->userModel->updateProfile($id, $data);
+        return ["success" => true];
     }
 
     // upload user profile

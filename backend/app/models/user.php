@@ -7,7 +7,7 @@ class User extends Model
     protected $table = 'users';
 
     // Create single user
-    public function createUser($firstname, $lastname, $email, $password, $role)
+    public function createUser($firstname, $lastname, $email, $password, $role, $phonenumber)
     {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
         
@@ -16,7 +16,8 @@ class User extends Model
             'lastName' => $lastname,
             'email' => $email,
             'password' => $password_hash,
-            'role_id' => $role
+            'role_id' => $role,
+            'phone_number' => $phonenumber,
         ];
 
         return $this->insert($data);
@@ -42,7 +43,7 @@ class User extends Model
     // Fetch all drivers in the system with a specific set of column details (attributes)
     public function fetchAllDrivers()
     {
-        $sql = "SELECT user_id, firstName, lastName, email, profile_image
+        $sql = "SELECT user_id, firstName, lastName, email, phone_number, profile_image
                 FROM {$this->table} WHERE role_id = 3";
 
         $stmt = $this->pdo->query($sql);
@@ -52,7 +53,7 @@ class User extends Model
     // Find a user by their id
     public function findProfileById($id)
     {
-        $sql = "SELECT user_id, firstname, lastname, email, role_id, profile_image FROM " . $this->table . " WHERE user_id = :id";
+        $sql = "SELECT user_id, firstname, lastname, email, phone_number, role_id, profile_image FROM " . $this->table . " WHERE user_id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -60,9 +61,14 @@ class User extends Model
 
     // Update user profile image
     public function updateProfileImage($id, $imagePath){
-        $sql = "UPDATE {$this->table} SET profile_Image = :profile_Image WHERE userId = :id";
+        $sql = "UPDATE {$this->table} SET profile_image = :profile_image WHERE user_id = :id";
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute(['profile_Image' => $imagePath, 'id' => $id]);
+        return $stmt->execute(['profile_image' => $imagePath, 'id' => $id]);
+    }
+
+    // Update user details
+    public function updateProfile($id, $data){
+        return $this->update($id, $data);
     }
 
     // update password
