@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -28,7 +29,15 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    _loadProfile();
     // Ensure that the provider is initialized and has the necessary data.
+  }
+
+  Future<void> _loadProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _biometricEnabled = prefs.getBool('biometricEnabled') ?? false;
+    });
   }
 
   void _logOut(BuildContext context) {
@@ -84,14 +93,13 @@ class _ProfilePageState extends State<ProfilePage> {
     if (response.statusCode == 200) {
       print('Image uploaded successfully');
     } else {
-
       print("status code: ${response.statusCode}");
     }
   }
 
   Future<void> _updateBiometricEnabled(bool value) async {
-    // final prefs = await SharedPreferences.getInstance();
-    //prefs.setBool('biometricEnabled', value);
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('biometricEnabled', value);
     setState(() {
       _biometricEnabled = value;
     });

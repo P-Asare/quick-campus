@@ -7,6 +7,7 @@ import 'package:quickcampus/screens/forget_password.dart';
 import 'package:quickcampus/screens/sign_up_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 import 'package:quickcampus/widgets/nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -61,23 +62,23 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   // Log user in (route to home)
-  void _login() {
+  void _login() async {
     if (_formKey.currentState?.validate() ?? false) {
-
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       authProvider.login(_emailController.text, _passwordController.text);
 
-      if(authProvider.loginSuccess == false){
+      if (authProvider.loginSuccess == false) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Wrong email or password')),
         );
       } else {
+        await _storeCredentials(
+            _emailController.text, _passwordController.text);
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const MyNavigationBar()));
+            MaterialPageRoute(builder: (context) => const MyNavigationBar()));
       }
       // Form is valid, proceed with login
       print('Login successful');
-
     } else {
       // Form is invalid, show errors
       print('Login failed');
@@ -97,6 +98,13 @@ class _SignInPageState extends State<SignInPage> {
   void _forgetPassword() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const ForgetPassword()));
+  }
+
+  Future<void> _storeCredentials(String email, String password) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('email', email);
+    await prefs.setString('password', password);
+    print('Credentials stored: $email, $password');
   }
 
   //Animated route
@@ -358,96 +366,96 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   )
 
-              //     // spacing
-              //     const SizedBox(
-              //       height: 10,
-              //     ),
+                  //     // spacing
+                  //     const SizedBox(
+                  //       height: 10,
+                  //     ),
 
-              //     // or with design
-              //     Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         Container(
-              //           height: 1,
-              //           width: 100,
-              //           decoration: const BoxDecoration(
-              //             color: Color.fromARGB(255, 214, 214, 214),
-              //           ),
-              //         ),
+                  //     // or with design
+                  //     Row(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         Container(
+                  //           height: 1,
+                  //           width: 100,
+                  //           decoration: const BoxDecoration(
+                  //             color: Color.fromARGB(255, 214, 214, 214),
+                  //           ),
+                  //         ),
 
-              //         // spacing
-              //         const SizedBox(
-              //           width: 10,
-              //         ),
+                  //         // spacing
+                  //         const SizedBox(
+                  //           width: 10,
+                  //         ),
 
-              //         const Text(
-              //           "Or with",
-              //           style: TextStyle(
-              //             color: Color.fromARGB(255, 160, 159, 159),
-              //           ),
-              //         ),
+                  //         const Text(
+                  //           "Or with",
+                  //           style: TextStyle(
+                  //             color: Color.fromARGB(255, 160, 159, 159),
+                  //           ),
+                  //         ),
 
-              //         // spacing
-              //         const SizedBox(
-              //           width: 10,
-              //         ),
+                  //         // spacing
+                  //         const SizedBox(
+                  //           width: 10,
+                  //         ),
 
-              //         // other line
-              //         Container(
-              //           height: 1,
-              //           width: 100,
-              //           decoration: const BoxDecoration(
-              //             color: Color.fromARGB(255, 214, 214, 214),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
+                  //         // other line
+                  //         Container(
+                  //           height: 1,
+                  //           width: 100,
+                  //           decoration: const BoxDecoration(
+                  //             color: Color.fromARGB(255, 214, 214, 214),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
 
-              //     // spacing
-              //     const SizedBox(
-              //       height: 30,
-              //     ),
+                  //     // spacing
+                  //     const SizedBox(
+                  //       height: 30,
+                  //     ),
 
-              //     // Google login
-              //     Container(
-              //       height: 54,
-              //       width: double.infinity,
-              //       child: ElevatedButton(
-              //           onPressed: () => _googleSignUp(),
-              //           style: ElevatedButton.styleFrom(
-              //             backgroundColor: Colors.transparent,
-              //             elevation: 0,
-              //             foregroundColor: Colors.black,
-              //             shape: RoundedRectangleBorder(
-              //               borderRadius:
-              //                   BorderRadius.circular(7), // Rounded corners
-              //               side: const BorderSide(
-              //                 color: Colors.grey,
-              //                 width: 1,
-              //               ),
-              //             ),
-              //           ),
-              //           child: const Row(
-              //             mainAxisAlignment: MainAxisAlignment.center,
-              //             children: [
-              //               Image(
-              //                 image: AssetImage(
-              //                   'assets/images/google_logo.png',
-              //                 ),
-              //                 height: 24,
-              //               ),
-              //               SizedBox(
-              //                 width: 10,
-              //               ),
-              //               Text(
-              //                 "Sign up with Google",
-              //                 style: TextStyle(
-              //                   fontSize: 16,
-              //                 ),
-              //               ),
-              //             ],
-              //           )),
-              //     )
+                  //     // Google login
+                  //     Container(
+                  //       height: 54,
+                  //       width: double.infinity,
+                  //       child: ElevatedButton(
+                  //           onPressed: () => _googleSignUp(),
+                  //           style: ElevatedButton.styleFrom(
+                  //             backgroundColor: Colors.transparent,
+                  //             elevation: 0,
+                  //             foregroundColor: Colors.black,
+                  //             shape: RoundedRectangleBorder(
+                  //               borderRadius:
+                  //                   BorderRadius.circular(7), // Rounded corners
+                  //               side: const BorderSide(
+                  //                 color: Colors.grey,
+                  //                 width: 1,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           child: const Row(
+                  //             mainAxisAlignment: MainAxisAlignment.center,
+                  //             children: [
+                  //               Image(
+                  //                 image: AssetImage(
+                  //                   'assets/images/google_logo.png',
+                  //                 ),
+                  //                 height: 24,
+                  //               ),
+                  //               SizedBox(
+                  //                 width: 10,
+                  //               ),
+                  //               Text(
+                  //                 "Sign up with Google",
+                  //                 style: TextStyle(
+                  //                   fontSize: 16,
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           )),
+                  //     )
                 ],
               ),
 
