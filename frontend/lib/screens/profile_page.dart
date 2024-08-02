@@ -1,9 +1,15 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:quickcampus/providers/auth_provider.dart';
 import 'package:quickcampus/screens/landing_page_two.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
+import 'dart:convert';
+import 'package:path/path.dart' as path;
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,7 +19,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final ImagePicker _imagePicker = ImagePicker();
+  bool _showImageError = false;
   File? _imageSelected;
+  bool _biometricEnabled = false;
+  final LocalAuthentication auth = LocalAuthentication();
 
   @override
   void initState() {
@@ -28,6 +38,119 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _resetPassword(BuildContext context) {
     // Implementation for resetting the password
+  }
+
+  Future<void> selectImageFromGallery() async {
+    try {
+      final XFile? image = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+      );
+
+      if (image != null) {
+        setState(() {
+          _imageSelected = File(image.path);
+          _showImageError = false;
+        });
+
+        print(
+            "The image path is: ${path.extension(_imageSelected!.path).toLowerCase()}");
+      }
+    } catch (e) {
+      print("Error picking image: $e");
+    }
+  }
+
+  Future<void> uploadImage(int? userId) async {
+    await selectImageFromGallery();
+
+    if (_imageSelected == null) {
+      return;
+    }
+
+    final imageExtension =
+        path.extension(_imageSelected!.path).replaceAll('.', '');
+    final mediaType = MediaType('image', imageExtension);
+
+    print("Even closer");
+
+    final uri =
+        Uri.parse('http://16.171.150.101/quick-campus/backend/upload/$userId');
+    final request = http.MultipartRequest('POST', uri)
+      ..files.add(await http.MultipartFile.fromPath(
+          'profile_image', _imageSelected!.path,
+          contentType: mediaType));
+    final response = await request.send();
+    print("The response is: $response");
+    if (response.statusCode == 200) {
+      print('Image uploaded successfully');
+    } else {
+
+      print("status code: ${response.statusCode}");
+    }
+  }
+
+  Future<void> _updateBiometricEnabled(bool value) async {
+    // final prefs = await SharedPreferences.getInstance();
+    //prefs.setBool('biometricEnabled', value);
+    setState(() {
+      _biometricEnabled = value;
+    });
+  }
+
+  Future<void> _authenticateWithBiometrics() async {
+    try {
+      final bool canCheckBiometrics = await auth.canCheckBiometrics;
+      final List<BiometricType> availableBiometrics =
+          await auth.getAvailableBiometrics();
+
+      if (canCheckBiometrics && availableBiometrics.isNotEmpty) {
+        final bool authenticated = await auth.authenticate(
+          localizedReason: 'Please authenticate to enable biometrics',
+          options: const AuthenticationOptions(
+            useErrorDialogs: true,
+            stickyAuth: true,
+          ),
+        );
+        if (authenticated) {
+          _updateBiometricEnabled(true);
+        } else {
+          setState(() {
+            _biometricEnabled = false;
+          });
+        }
+      } else {
+        _showBiometricSetupDialog();
+        setState(() {
+          _biometricEnabled = false;
+        });
+      }
+    } catch (e) {
+      print(e);
+      setState(() {
+        _biometricEnabled = false;
+      });
+    }
+  }
+
+  void _showBiometricSetupDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Biometrics Not Set Up'),
+          content: const Text(
+              'Biometric authentication is not set up on this device. Please set it up in your device settings.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -63,7 +186,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           shape: BoxShape.circle,
                         ),
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            uploadImage(user!.userId);
+                          },
                           icon: const Icon(Icons.edit, color: Colors.white),
                         ),
                       ),
@@ -75,6 +200,26 @@ class _ProfilePageState extends State<ProfilePage> {
                 _buildInfoTile(user?.lastName ?? "Unknown"),
                 _buildInfoTile(user?.email ?? "Unknown"),
                 _buildResetPasswordTile(context),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFD1E2DB),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: SwitchListTile(
+                    tileColor: const Color(0xFFD1E2DB),
+                    title: const Text('Enable biometric'),
+                    value: _biometricEnabled,
+                    activeColor: const Color(0xFF307A59),
+                    onChanged: (bool value) {
+                      if (value) {
+                        _authenticateWithBiometrics();
+                      } else {
+                        _updateBiometricEnabled(value);
+                      }
+                    },
+                  ),
+                ),
                 MyFilledButton(
                   title: "Log Out",
                   onPressed: () => _logOut(context),
