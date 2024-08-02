@@ -335,7 +335,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
 
-              // Other forms of sign up
+              // // Other forms of sign up
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -356,98 +356,98 @@ class _SignInPageState extends State<SignInPage> {
                         )
                       ],
                     ),
-                  ),
-
-                  // spacing
-                  const SizedBox(
-                    height: 10,
-                  ),
-
-                  // or with design
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 1,
-                        width: 100,
-                        decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 214, 214, 214),
-                        ),
-                      ),
-
-                      // spacing
-                      const SizedBox(
-                        width: 10,
-                      ),
-
-                      const Text(
-                        "Or with",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 160, 159, 159),
-                        ),
-                      ),
-
-                      // spacing
-                      const SizedBox(
-                        width: 10,
-                      ),
-
-                      // other line
-                      Container(
-                        height: 1,
-                        width: 100,
-                        decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 214, 214, 214),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // spacing
-                  const SizedBox(
-                    height: 30,
-                  ),
-
-                  // Google login
-                  Container(
-                    height: 54,
-                    width: double.infinity,
-                    child: ElevatedButton(
-                        onPressed: () => _googleSignUp(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          elevation: 0,
-                          foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(7), // Rounded corners
-                            side: const BorderSide(
-                              color: Colors.grey,
-                              width: 1,
-                            ),
-                          ),
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image(
-                              image: AssetImage(
-                                'assets/images/google_logo.png',
-                              ),
-                              height: 24,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              "Sign up with Google",
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        )),
                   )
+
+              //     // spacing
+              //     const SizedBox(
+              //       height: 10,
+              //     ),
+
+              //     // or with design
+              //     Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         Container(
+              //           height: 1,
+              //           width: 100,
+              //           decoration: const BoxDecoration(
+              //             color: Color.fromARGB(255, 214, 214, 214),
+              //           ),
+              //         ),
+
+              //         // spacing
+              //         const SizedBox(
+              //           width: 10,
+              //         ),
+
+              //         const Text(
+              //           "Or with",
+              //           style: TextStyle(
+              //             color: Color.fromARGB(255, 160, 159, 159),
+              //           ),
+              //         ),
+
+              //         // spacing
+              //         const SizedBox(
+              //           width: 10,
+              //         ),
+
+              //         // other line
+              //         Container(
+              //           height: 1,
+              //           width: 100,
+              //           decoration: const BoxDecoration(
+              //             color: Color.fromARGB(255, 214, 214, 214),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+
+              //     // spacing
+              //     const SizedBox(
+              //       height: 30,
+              //     ),
+
+              //     // Google login
+              //     Container(
+              //       height: 54,
+              //       width: double.infinity,
+              //       child: ElevatedButton(
+              //           onPressed: () => _googleSignUp(),
+              //           style: ElevatedButton.styleFrom(
+              //             backgroundColor: Colors.transparent,
+              //             elevation: 0,
+              //             foregroundColor: Colors.black,
+              //             shape: RoundedRectangleBorder(
+              //               borderRadius:
+              //                   BorderRadius.circular(7), // Rounded corners
+              //               side: const BorderSide(
+              //                 color: Colors.grey,
+              //                 width: 1,
+              //               ),
+              //             ),
+              //           ),
+              //           child: const Row(
+              //             mainAxisAlignment: MainAxisAlignment.center,
+              //             children: [
+              //               Image(
+              //                 image: AssetImage(
+              //                   'assets/images/google_logo.png',
+              //                 ),
+              //                 height: 24,
+              //               ),
+              //               SizedBox(
+              //                 width: 10,
+              //               ),
+              //               Text(
+              //                 "Sign up with Google",
+              //                 style: TextStyle(
+              //                   fontSize: 16,
+              //                 ),
+              //               ),
+              //             ],
+              //           )),
+              //     )
                 ],
               ),
 

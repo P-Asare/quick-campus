@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:quickcampus/models/location.dart';
+import 'package:quickcampus/providers/auth_provider.dart';
+import 'package:quickcampus/providers/request_provider.dart';
 import 'package:quickcampus/screens/delivering_page.dart';
+import 'package:quickcampus/screens/orders_page.dart';
 import 'package:quickcampus/widgets/filled_button.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:quickcampus/services/maps_services.dart';
@@ -61,8 +65,32 @@ class _HomePageState extends State<HomePage> {
   // Place request
   void _placeRequest() {
     if (_pickupController.text.isNotEmpty && _selectedLocation != null) {
+      final userId =
+          Provider.of<AuthProvider>(context, listen: false).user!.userId;
+      final latitude = _selectedLocation!.lat!;
+      final longitude = _selectedLocation!.lng!;
+
+      // Make request
+      Provider.of<RequestProvider>(context, listen: false)
+          .placePendingRequest(userId, latitude, longitude);
+
+      // Move to the orders page
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content:
+                Text('Your request has been placed and is awaiting a rider')),
+      );
       _goToNextPage(context, _selectedLocation!);
     }
+  }
+
+  // Go to orderpage
+  void _goToOrdersPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const OrdersPage(),
+      ),
+    );
   }
 
   // Next page

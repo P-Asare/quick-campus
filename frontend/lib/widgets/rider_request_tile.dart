@@ -5,6 +5,7 @@ class RiderRequestTile extends StatelessWidget {
   final String fromAddress;
   final String to;
   final String toAddress;
+  final bool hide;
 
   const RiderRequestTile({
     super.key,
@@ -12,6 +13,7 @@ class RiderRequestTile extends StatelessWidget {
     required this.fromAddress,
     required this.to,
     required this.toAddress,
+    required this.hide,
   });
 
   // function to accept a request
@@ -79,32 +81,34 @@ class RiderRequestTile extends StatelessWidget {
                         ),
                       ],
                     ),
-                    GestureDetector(
-                      onTap: () => _acceptRequest(),
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            color: const Color(0xFF307A59),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Row(
-                          children: [
-                            Text(
-                              "Accept",
-                              style: TextStyle(
-                                color: Colors.white,
+                    (!hide)
+                        ? GestureDetector(
+                            onTap: () => _acceptRequest(),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: const Color(0xFF307A59),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: const Row(
+                                children: [
+                                  Text(
+                                    "Accept",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Icon(
-                              Icons.check,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
+                          )
+                        : const SizedBox()
                   ],
                 ),
               ),

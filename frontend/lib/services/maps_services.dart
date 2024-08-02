@@ -32,16 +32,14 @@ class MapsService {
 
   Future<MyLocation?> getAddressFromLatLng(double lat, double long) async {
     try {
-
       List<Placemark> placemark = await placemarkFromCoordinates(lat, long);
 
       return MyLocation(
-        name: placemark.reversed.last.name!,
-        address: placemark.reversed.last.street!,
+        name: placemark.first.locality!,
+        address: placemark.reversed.first.street!,
         lat: lat,
         lng: long,
       );
-      
     } catch (e) {
       print('Error getting address from location: $e');
     }
