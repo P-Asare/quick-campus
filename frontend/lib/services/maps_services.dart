@@ -36,7 +36,7 @@ class MapsService {
 
       return MyLocation(
         name: placemark.first.locality!,
-        address: placemark.reversed.first.street!,
+        address: placemark.reversed.last.street!,
         lat: lat,
         lng: long,
       );
