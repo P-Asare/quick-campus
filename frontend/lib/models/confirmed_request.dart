@@ -25,7 +25,7 @@ class ConfirmedRequest {
       dropoffLatitude: double.parse(json['dropoff_latitude']),
       dropoffLongitude: double.parse(json['dropoff_longitude']),
       createdAt: DateTime.parse(json['created_at']),
-      status: json['status'],
+      status: json['status'].toString(),
     );
   }
 
@@ -36,7 +36,7 @@ class ConfirmedRequest {
       'rider_id': riderId,
       'dropoff_latitude': dropoffLatitude,
       'dropoff_longitude': dropoffLongitude,
-      'created_at': createdAt.toIso8601String(),
+      'created_at': createdAt.year.toString(),
       'status': status,
     };
   }

@@ -66,56 +66,61 @@ class _RiderHomePageState extends State<RiderHomePage> {
           : RefreshIndicator(
               color: const Color(0xFF307A59),
               onRefresh: _refreshRequests,
-              child: ListView.builder(
-                padding: const EdgeInsets.all(20),
-                itemCount: requestProvider.pendingRequests.length,
-                itemBuilder: (context, index) {
-                  if (requestProvider.pendingRequests.isEmpty) {
-                    print("empty");
-                    return const Center(child: Icon(Icons.pedal_bike));
-                  }
+              child: requestProvider.pendingRequests.isEmpty
+                  ? const Center(
+                      child: Text(
+                        "No pending requests",
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(20),
+                      itemCount: requestProvider.pendingRequests.length,
+                      itemBuilder: (context, index) {
+                        // Request in specific location
+                        final request = requestProvider.pendingRequests[index];
 
-                  // Request in specific location
-                  final request = requestProvider.pendingRequests[index];
+                        return FutureBuilder(
+                          future: _fetchLocationDetails(request),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            if (snapshot.hasError || !snapshot.hasData) {
+                              return ListTile(
+                                title: const Text("Error loading location"),
+                                subtitle: Text(snapshot.error.toString()),
+                              );
+                            }
 
-                  return FutureBuilder(
-                    future: _fetchLocationDetails(request),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      if (snapshot.hasError || !snapshot.hasData) {
-                        return ListTile(
-                          title: const Text("Error loading location"),
-                          subtitle: Text(snapshot.error.toString()),
+                            final locations = snapshot.data!;
+                            return Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    print("Accept request");
+                                    requestProvider.confirmPendingRequest(
+                                        request.pendingId, currentUser!.userId);
+                                  },
+                                  child: RiderRequestTile(
+                                    from: locations['fromName'] ?? 'Unknown',
+                                    fromAddress:
+                                        locations['fromAddress'] ?? 'Unknown',
+                                    to: locations['toName'] ?? 'Unknown',
+                                    toAddress:
+                                        locations['toAddress'] ?? 'Unknown',
+                                    hide: false,
+                                  ),
+                                ),
+                                const SizedBox(height: 15),
+                              ],
+                            );
+                          },
                         );
-                      }
-
-                      final locations = snapshot.data!;
-                      return Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              print("Accept request");
-                              requestProvider.confirmPendingRequest(
-                                  request.pendingId, currentUser!.userId);
-                            },
-                            child: RiderRequestTile(
-                              from: locations['fromName'] ?? 'Unknown',
-                              fromAddress:
-                                  locations['fromAddress'] ?? 'Unknown',
-                              to: locations['toName'] ?? 'Unknown',
-                              toAddress: locations['toAddress'] ?? 'Unknown',
-                              hide: false,
-                            ),
-                          ),
-                          const SizedBox(height: 15),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
+                      },
+                    ),
             ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:quickcampus/providers/auth_provider.dart';
 import 'package:quickcampus/providers/request_provider.dart';
 import 'package:quickcampus/services/maps_services.dart';
 import 'package:quickcampus/widgets/rider_order_tile.dart';
+import 'package:intl/intl.dart';
 
 class RiderOrdersPage extends StatefulWidget {
   const RiderOrdersPage({super.key});
@@ -69,7 +70,12 @@ class _RiderOrdersPageState extends State<RiderOrdersPage> {
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     children: requestProvider.confirmedRequests.isEmpty
-                        ? [const Center(child: Text("No requests found"))]
+                        ? [
+                            const Center(
+                                child: Text("No requests found",
+                                    style: TextStyle(
+                                        fontSize: 18, color: Colors.grey)))
+                          ]
                         : requestProvider.confirmedRequests.map((request) {
                             return FutureBuilder<Map<String, String>>(
                               future: _fetchLocationDetails(request),
@@ -97,7 +103,8 @@ class _RiderOrdersPageState extends State<RiderOrdersPage> {
                                       toAddress:
                                           locations['toAddress'] ?? 'Unknown',
                                       student: "Palal",
-                                      date: request.createdAt.toString(),
+                                      date: DateFormat('yyyy-MM-dd')
+                                          .format(request.createdAt),
                                     ),
                                     const SizedBox(height: 15),
                                   ],
