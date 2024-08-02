@@ -126,13 +126,6 @@ class OrderTile extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: const Row(
-                  children: [
-                    SizedBox(width: 4),
-                    Icon(Icons.star,
-                      color: Color.fromARGB(141, 255, 193, 7)),
-                  ],
-                ),
               ),
               const SizedBox(height: 12),
 

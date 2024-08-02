@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:quickcampus/models/confirmed_request.dart';
 import 'package:quickcampus/models/pending_request.dart';
+import 'package:quickcampus/models/user.dart';
+import 'package:quickcampus/services/auth_services.dart';
 import 'package:quickcampus/services/request_services.dart';
 
 class RequestProvider with ChangeNotifier {
   final RequestService _requestService = RequestService();
+  final AuthService _authService = AuthService();
 
   List<PendingRequest> _pendingRequests = [];
   List<PendingRequest> _userPendingRequests = [];
   List<ConfirmedRequest> _confirmedRequests = [];
   bool _isLoading = false;
   String? _errorMessage;
+  Map<int, User> _confirmedRequestStudents = {};
 
   List<PendingRequest> get pendingRequests => _pendingRequests;
   List<PendingRequest> get userPendingRuests => _userPendingRequests;
   List<ConfirmedRequest> get confirmedRequests => _confirmedRequests;
+  Map<int, User> get confirmedRequestStudents => _confirmedRequestStudents;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
@@ -56,6 +61,19 @@ class RequestProvider with ChangeNotifier {
     try {
       _confirmedRequests =
           await _requestService.getConfirmedRequests(userRole, userId);
+      
+      final userProfiles = await Future.wait(
+        _confirmedRequests.map((request) async {
+          return await _authService.getProfile(request.studentId);
+        }).toList(),
+      );
+
+      // Create a map with request_id as key and User as value
+     _confirmedRequestStudents = {
+        for (var i = 0; i < _confirmedRequests.length; i++)
+          _confirmedRequests[i].requestId: userProfiles[i]!
+      };
+
       print("Request id is: ${_confirmedRequests[0].requestId}");
     } catch (e) {
       _errorMessage = e.toString();

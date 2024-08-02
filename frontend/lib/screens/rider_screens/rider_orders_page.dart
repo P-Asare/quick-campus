@@ -122,7 +122,7 @@ class _RiderOrdersPageState extends State<RiderOrdersPage> {
   Future<Map<String, String>> _fetchLocationDetails(
       ConfirmedRequest request) async {
     final fromLocation = await _mapsService.getAddressFromLatLng(
-        request.dropoffLatitude, request.dropoffLongitude);
+        5.7630902491463365, -0.2236314561684989);
     final toLocation = await _mapsService.getAddressFromLatLng(
         request.dropoffLatitude, request.dropoffLongitude);
 

@@ -9,11 +9,13 @@ class AuthProvider with ChangeNotifier {
   bool _loginSuccess = false;
   String? _errorMessage;
   bool isLoading = false;
+  User? _otherUserFetched;
 
   User? get user => _user;
   bool get registrationSuccess => _registrationSuccess;
   bool get loginSuccess => _loginSuccess;
   String? get errorMessage => _errorMessage;
+  User? get otherUser => _otherUserFetched;
 
   // Temporarily store registration details
   Map<String, String> _registrationDetails = {};
@@ -109,22 +111,21 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // TODO: Get profile
-  Future<void> getProfile(int userId) async {
-    setLoading(true);
-    try {
-      final profileResponse = await _authService.getProfile(userId);
+  // Future<void> getProfile(int userId) async {
+  //   setLoading(true);
+  //   try {
+  //     final profileResponse = await _authService.getProfile(userId);
 
-      if (profileResponse['success'] == true) {
-        _user = User.fromJson(profileResponse);
-      } else {
-        _errorMessage = profileResponse['error'];
-      }
+  //     if (profileResponse['success'] == true) {
+  //       _otherUserFetched = User.fromJson(profileResponse);
+  //     } else {
+  //       _errorMessage = profileResponse['error'];
+  //     }
 
-      setLoading(false);
-    } catch (e) {
-      _errorMessage = e.toString();
-      setLoading(false);
-    }
-  }
+  //     setLoading(false);
+  //   } catch (e) {
+  //     _errorMessage = e.toString();
+  //     setLoading(false);
+  //   }
+  // }
 }

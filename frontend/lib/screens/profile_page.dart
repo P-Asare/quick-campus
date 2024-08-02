@@ -25,12 +25,20 @@ class _ProfilePageState extends State<ProfilePage> {
   File? _imageSelected;
   bool _biometricEnabled = false;
   final LocalAuthentication auth = LocalAuthentication();
+  final userProfileImage =
+      'http://16.171.150.101/quick-campus/backend/public/profile_images/';
 
   @override
   void initState() {
     super.initState();
     _loadProfile();
     // Ensure that the provider is initialized and has the necessary data.
+  }
+
+  Future<void> _clearCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('email');
+    await prefs.remove('password');
   }
 
   Future<void> _loadProfile() async {
@@ -41,6 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _logOut(BuildContext context) {
+    _clearCredentials();
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const SecondLanding()));
   }
@@ -181,8 +190,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       radius: 80,
                       backgroundImage: _imageSelected != null
                           ? FileImage(_imageSelected!)
-                          : const AssetImage("assets/images/no_profile.png")
-                              as ImageProvider,
+                          : ((user!.profileImage == null)
+                              ? const AssetImage("assets/images/no_profile.png")
+                                  as ImageProvider
+                              : NetworkImage(
+                                  "$userProfileImage/${user.profileImage}")),
                     ),
                     Positioned(
                       bottom: 0,

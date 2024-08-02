@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:quickcampus/models/user.dart';
 
 class AuthService {
   final String baseUrl = "http://16.171.150.101/quick-campus/backend";
@@ -48,11 +49,12 @@ class AuthService {
   }
 
   // Get the profile details of a user
-  Future<Map<String, dynamic>> getProfile(int userId) async {
+  Future<User> getProfile(int userId) async {
     final response = await http.get(Uri.parse('$baseUrl/users/$userId'));
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      final data = jsonDecode(response.body);
+      return User.fromJson(data);
     } else {
       throw Exception("Failed to get profile");
     }

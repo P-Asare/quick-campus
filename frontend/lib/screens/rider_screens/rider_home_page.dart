@@ -128,9 +128,9 @@ class _RiderHomePageState extends State<RiderHomePage> {
   Future<Map<String, String>> _fetchLocationDetails(
       PendingRequest request) async {
     final fromLocation = await _mapsService.getAddressFromLatLng(
-        request.dropoffLatitude, request.dropoffLongitude);
-    final toLocation = await _mapsService.getAddressFromLatLng(
         5.7630902491463365, -0.2236314561684989);
+    final toLocation = await _mapsService.getAddressFromLatLng(
+        request.dropoffLatitude, request.dropoffLongitude);
 
     return {
       'fromName': fromLocation?.name ?? 'Unknown',

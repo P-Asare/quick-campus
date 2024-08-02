@@ -77,7 +77,7 @@ class _SendingPageState extends State<SendingPage> {
                                     locations['fromAddress'] ?? 'Unknown',
                                 to: locations['toName'] ?? 'Unknown',
                                 toAddress: locations['toAddress'] ?? 'Unknown',
-                                driver: "someone",
+                                driver: "Palal",
                                 onGoing: (request.status == 'begin'),
                                 date: (request.createdAt).toString(),
                               ),
@@ -99,7 +99,7 @@ class _SendingPageState extends State<SendingPage> {
     final fromLocation = await _mapsService.getAddressFromLatLng(
         request.dropoffLatitude, request.dropoffLongitude);
     final toLocation = await _mapsService.getAddressFromLatLng(
-        request.dropoffLatitude, request.dropoffLongitude);
+        5.7630902491463365, -0.2236314561684989);
 
     return {
       'fromName': fromLocation?.name ?? 'Unknown',
